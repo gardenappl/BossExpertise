@@ -23,14 +23,13 @@ namespace BossExpertise
 				{
 					Main.expertMode = false;
 					Main.NewText("This world is now in Normal Mode");
-					return;
 				}
 				else
 				{
 					Main.expertMode = true;
 					Main.NewText("This world is now in Expert Mode!", 255, 50, 50);
-					return;
 				}
+				return;
 			}
 			if(text.StartsWith("/expert", StringComparison.InvariantCultureIgnoreCase))
 			{
@@ -44,15 +43,14 @@ namespace BossExpertise
 				{
 					Main.expertMode = true;
 					Main.NewText("This world is now in Expert Mode!", 255, 50, 50);
-					return;
 				}
-				if(words[1].Equals("false", StringComparison.InvariantCultureIgnoreCase))
+				else if(words[1].Equals("false", StringComparison.InvariantCultureIgnoreCase))
 				{
 					Main.expertMode = false;
 					Main.NewText("This world is now in Normal Mode");
-					return;
 				}
-				Main.NewText("Usage: /expert OR /expert <true|false>");
+				else
+					Main.NewText("Usage: /expert OR /expert <true|false>");
 				return;
 			}
 		}
