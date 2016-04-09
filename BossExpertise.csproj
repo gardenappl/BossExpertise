@@ -54,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BossExpertise.cs" />
+    <Compile Include="CheatSheetIntegration.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="ExpertGlobalNPC.cs" />
     <Compile Include="ExpertNPCInfo.cs" />
   </ItemGroup>

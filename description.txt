@@ -1,2 +1,5 @@
 ﻿Do you think that Expert Mode is too hard but still want a challenge? Are Normal Mode bosses too boring?
 Then this mod is probably for you! Boss Expertise makes bosses behave like they're in Expert Mode, even though their stats don't change.
+Optional feature:
+ -Bosses drop Treasure Bags
+This is disabled by default: visit the Forum Thread for info about how to enable it.
