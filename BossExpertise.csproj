@@ -56,8 +56,11 @@
     <Compile Include="BossExpertise.cs" />
     <Compile Include="CheatSheetIntegration.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="ExpertGlobalNPC.cs" />
-    <Compile Include="ExpertNPCInfo.cs" />
+    <Compile Include="NPC\ExpertGlobalNPC.cs" />
+    <Compile Include="NPC\ExpertNPCInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NPC" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
