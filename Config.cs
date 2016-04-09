@@ -11,7 +11,7 @@ namespace BossExpertise
 		public static bool DropBags;
 		
 		static int ConfigVersion;
-		const int LatestVersion = 1;
+		const int LatestVersion = 2;
 		static string ConfigFolderPath = Path.Combine(Main.SavePath, "Mod Configs", "BossExpertise");
 		static string ConfigPath = Path.Combine(ConfigFolderPath, "config.txt");
 		static string ConfigVersionFilePath = Path.Combine(ConfigFolderPath, "configVersion.txt");
@@ -34,7 +34,7 @@ namespace BossExpertise
 			else if(ConfigVersion > LatestVersion)
 				BossExpertise.Log("Config is from the future?! Config version: {0}; Latest version: {1}", ConfigVersion, LatestVersion);
 			
-			if(!ReadConfig()) //If reading failed
+			if(!ReadConfig() || ConfigVersion < LatestVersion)
 			{
 				CreateConfig();
 				WriteConfigVersion(LatestVersion);
@@ -87,7 +87,7 @@ namespace BossExpertise
 			using(var file = File.CreateText(ConfigPath))
 			{
 				file.WriteLine("This value can either be True or False");
-				file.WriteLine("Change mob drop rates to Expert: {0}", DropBags);
+				file.WriteLine("Drop Treasure Bags: {0}", DropBags);
 			}
 		}
 		
