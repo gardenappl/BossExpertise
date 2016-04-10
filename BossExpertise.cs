@@ -20,6 +20,9 @@ namespace BossExpertise
 		
 		public override void ChatInput(string text)
 		{
+			if(!Config.AddCommand)
+				return;
+			
 			if(text.Equals("/expert"))
 			{
 				if(Main.expertMode)
@@ -64,7 +67,8 @@ namespace BossExpertise
 		
 		public override void PostSetupContent()
 		{
-			//CheatSheetIntegration.Load(this);
+			if(Config.AddCheatSheetButton)
+				CheatSheetIntegration.Load(this);
 		}
 		
 		public static void Log(string message, params object[] formatData)

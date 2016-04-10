@@ -1,6 +1,6 @@
 ﻿displayName = Boss Expertise
 author = goldenapple
-version = 2.1
+version = 2.2
 homepage = http://forums.terraria.org/index.php?threads/boss-expertise.41243/
 hideCode = false
 includeSource = true

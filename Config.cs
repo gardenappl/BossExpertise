@@ -9,9 +9,12 @@ namespace BossExpertise
 	public static class Config
 	{
 		public static bool DropBags;
+		public static bool AddCheatSheetButton = true;
+		public static bool ChangeBossAI = true;
+		public static bool AddCommand = true;
 		
 		static int ConfigVersion;
-		const int LatestVersion = 2;
+		const int LatestVersion = 3;
 		static string ConfigFolderPath = Path.Combine(Main.SavePath, "Mod Configs", "BossExpertise");
 		static string ConfigPath = Path.Combine(ConfigFolderPath, "config.txt");
 		static string ConfigVersionFilePath = Path.Combine(ConfigFolderPath, "configVersion.txt");
@@ -23,7 +26,7 @@ namespace BossExpertise
 			{
 				CreateConfig();
 				WriteConfigVersion(LatestVersion);
-				ErrorLogger.Log("Creating new config");
+				ErrorLogger.Log("Creating new config...");
 			}
 			
 			ConfigVersion = ReadConfigVersion();
@@ -38,25 +41,43 @@ namespace BossExpertise
 			{
 				CreateConfig();
 				WriteConfigVersion(LatestVersion);
-				ErrorLogger.Log("Recreating config");
+				ErrorLogger.Log("Recreating config...");
 			}
+			
+			//Debug
+			BossExpertise.Log("Drop bags: {0}", DropBags);
+			BossExpertise.Log("Change boss AI: {0}", ChangeBossAI);
+			BossExpertise.Log("Add Cheat Sheet button: {0}", AddCheatSheetButton);
+			BossExpertise.Log("Add /expert command: {0}", AddCommand);
 		}
 		
 		
-		internal static bool ReadConfig()
+		static bool ReadConfig()
 		{
 			var file = new StreamReader(ConfigPath);
 			try
 			{
+				file.ReadLine(); //Skip the comment
+				DropBags = Boolean.Parse(file.ReadLine().Split(':')[1]); //Read the actual value
+				
 				file.ReadLine();
-				DropBags = Boolean.Parse(file.ReadLine().Split(':')[1]);
-				BossExpertise.Log("Drop bags: {0}", DropBags);
+				ChangeBossAI = Boolean.Parse(file.ReadLine().Split(':')[1]);
+				
+				file.ReadLine();
+				AddCheatSheetButton = Boolean.Parse(file.ReadLine().Split(':')[1]);
+				
+				file.ReadLine();
+				AddCommand = Boolean.Parse(file.ReadLine().Split(':')[1]);
+				
 				return true;
 			}
 			catch(Exception e)
 			{
-				BossExpertise.Log("Couldn't properly read config file! Using default values...");
-				BossExpertise.Log(e.ToString());
+				if(ConfigVersion == LatestVersion)
+				{
+					BossExpertise.Log("Couldn't properly read config file! Using default values...");
+					BossExpertise.Log(e.ToString());
+				}
 			}
 			finally
 			{
@@ -65,7 +86,7 @@ namespace BossExpertise
 			return false;
 		}
 		
-		internal static int ReadConfigVersion()
+		static int ReadConfigVersion()
 		{
 			string[] versionFile = File.ReadAllLines(ConfigVersionFilePath);
 			try
@@ -81,17 +102,26 @@ namespace BossExpertise
 		}
 		
 		
-		internal static void CreateConfig()
+		static void CreateConfig()
 		{
 			Directory.CreateDirectory(ConfigFolderPath);
 			using(var file = File.CreateText(ConfigPath))
 			{
 				file.WriteLine("This value can either be True or False");
 				file.WriteLine("Drop Treasure Bags: {0}", DropBags);
+				
+				file.WriteLine("This value can either be True or False");
+				file.WriteLine("Change boss AI: {0}", ChangeBossAI);
+				
+				file.WriteLine("This value can either be True or False (requires the Cheat Sheet mod)");
+				file.WriteLine("Add Cheat Sheet button: {0}", AddCheatSheetButton);
+				
+				file.WriteLine("This value can either be True or False");
+				file.WriteLine("Add /expert command: {0}", AddCommand);
 			}
 		}
 		
-		internal static void WriteConfigVersion(int version)
+		static void WriteConfigVersion(int version)
 		{
 			using(var file = File.CreateText(ConfigVersionFilePath))
 			{

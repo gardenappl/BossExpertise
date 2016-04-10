@@ -9,7 +9,7 @@ namespace BossExpertise
 	{
 		public override bool PreAI(NPC npc)
 		{
-			if(npc.boss && !Main.expertMode)
+			if(npc.boss && Config.ChangeBossAI && !Main.expertMode)
 				SetFakeExpert(npc, true);
 			return true;
 		}
