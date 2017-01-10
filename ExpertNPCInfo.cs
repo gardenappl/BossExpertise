@@ -7,6 +7,11 @@ namespace BossExpertise
 {
 	public class ExpertNPCInfo : NPCInfo
 	{
+		public override bool Autoload(ref string name)
+		{
+			return false;
+		}
+		
 		internal bool FakeExpertMode;
 	}
 }
