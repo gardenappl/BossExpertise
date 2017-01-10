@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 using Terraria;
-using Terraria.ModLoader;
+using Terraria.IO;
 
 namespace BossExpertise
 {
@@ -11,124 +11,80 @@ namespace BossExpertise
 		public static bool DropBags;
 		public static bool AddCheatSheetButton = true;
 		public static bool ChangeBossAI = true;
-		public static bool AddCommand = true;
+		public static bool AddExpertCommand = true;
+		public static bool DemonHeartHack;
+		public static bool TransformMatrix;
 		
 		static int ConfigVersion;
-		const int LatestVersion = 3;
-		static string ConfigFolderPath = Path.Combine(Main.SavePath, "Mod Configs", "BossExpertise");
-		static string ConfigPath = Path.Combine(ConfigFolderPath, "config.txt");
-		static string ConfigVersionFilePath = Path.Combine(ConfigFolderPath, "configVersion.txt");
+		const int LatestVersion = 1;
+		static string ConfigFolderPath = Path.Combine(Main.SavePath, "Mod Configs", "Boss Expertise");
+		static string ConfigPath = Path.Combine(ConfigFolderPath, "config.json");
+		static string ConfigVersionPath = Path.Combine(ConfigFolderPath, "config.version");
 		
+		static Preferences Configuration = new Preferences(ConfigPath);
 		
 		public static void Load()
 		{
-			if(!File.Exists(ConfigPath) || !File.Exists(ConfigVersionFilePath))
+			if(File.Exists(ConfigVersionPath))
 			{
-				CreateConfig();
-				WriteConfigVersion(LatestVersion);
-				ErrorLogger.Log("Creating new config...");
+				try
+				{
+					int.TryParse(File.ReadAllText(ConfigVersionPath), out ConfigVersion);
+				}
+				catch(Exception e)
+				{
+					BossExpertise.Log("Unable to read config version!");
+					BossExpertise.Log(e.ToString());
+					ConfigVersion = 0;
+				}
 			}
+			else
+				ConfigVersion = 0;
 			
-			ConfigVersion = ReadConfigVersion();
-			if(ConfigVersion == LatestVersion)
-				BossExpertise.Log("Config is up to date! Config version: {0}", ConfigVersion);
-			else if(ConfigVersion < LatestVersion)
-				BossExpertise.Log("Config is outdated! Config version: {0}; Latest version: {1}", ConfigVersion, LatestVersion);
-			else if(ConfigVersion > LatestVersion)
-				BossExpertise.Log("Config is from the future?! Config version: {0}; Latest version: {1}", ConfigVersion, LatestVersion);
-			
-			if(!ReadConfig() || ConfigVersion < LatestVersion)
+			if(ConfigVersion < LatestVersion)
+				BossExpertise.Log("Config is outdated! Current version: {0} Latest version: {1}", ConfigVersion, LatestVersion);
+			if(ConfigVersion > LatestVersion)
+				BossExpertise.Log("Config is from the future?! Current version: {0} Latest version: {1}", ConfigVersion, LatestVersion);
+				
+//			BossExpertise.Log("Reading config...");
+			if(!ReadConfig())
 			{
-				CreateConfig();
-				WriteConfigVersion(LatestVersion);
-				ErrorLogger.Log("Recreating config...");
+				BossExpertise.Log("Failed to read config file! Recreating config...");
+				SaveConfig();
 			}
-			
-			//Debug
-			BossExpertise.Log("Drop bags: {0}", DropBags);
-			BossExpertise.Log("Change boss AI: {0}", ChangeBossAI);
-			BossExpertise.Log("Add Cheat Sheet button: {0}", AddCheatSheetButton);
-			BossExpertise.Log("Add /expert command: {0}", AddCommand);
+			else if(ConfigVersion != LatestVersion)
+			{
+				BossExpertise.Log("Replacing config with newest version...");
+				File.WriteAllText(ConfigVersionPath, LatestVersion.ToString());
+				SaveConfig();
+			}
 		}
-		
 		
 		static bool ReadConfig()
 		{
-			var file = new StreamReader(ConfigPath);
-			try
+			if(Configuration.Load())
 			{
-				file.ReadLine(); //Skip the comment
-				DropBags = Boolean.Parse(file.ReadLine().Split(':')[1]); //Read the actual value
-				
-				file.ReadLine();
-				ChangeBossAI = Boolean.Parse(file.ReadLine().Split(':')[1]);
-				
-				file.ReadLine();
-				AddCheatSheetButton = Boolean.Parse(file.ReadLine().Split(':')[1]);
-				
-				file.ReadLine();
-				AddCommand = Boolean.Parse(file.ReadLine().Split(':')[1]);
-				
+				Configuration.Get("DropTreasureBagsInNormal", ref DropBags);
+				Configuration.Get("DemonHeartWorksInNormal", ref DemonHeartHack);
+				Configuration.Get("ChangeBossAI", ref ChangeBossAI);
+				Configuration.Get("AddCheatSheetButton", ref AddCheatSheetButton);
+				Configuration.Get("AddExpertCommand", ref AddExpertCommand);
+				Configuration.Get("Fun", ref TransformMatrix);
 				return true;
-			}
-			catch(Exception e)
-			{
-				if(ConfigVersion == LatestVersion)
-				{
-					BossExpertise.Log("Couldn't properly read config file! Using default values...");
-					BossExpertise.Log(e.ToString());
-				}
-			}
-			finally
-			{
-				file.Dispose();
 			}
 			return false;
 		}
 		
-		static int ReadConfigVersion()
+		static void SaveConfig()
 		{
-			string[] versionFile = File.ReadAllLines(ConfigVersionFilePath);
-			try
-			{
-				return Int32.Parse(versionFile[1]);
-			}
-			catch(Exception e)
-			{
-				BossExpertise.Log("Couldn't properly read config version file!");
-				BossExpertise.Log(e.ToString());
-				return LatestVersion;
-			}
-		}
-		
-		
-		static void CreateConfig()
-		{
-			Directory.CreateDirectory(ConfigFolderPath);
-			using(var file = File.CreateText(ConfigPath))
-			{
-				file.WriteLine("This value can either be True or False");
-				file.WriteLine("Drop Treasure Bags: {0}", DropBags);
-				
-				file.WriteLine("This value can either be True or False");
-				file.WriteLine("Change boss AI: {0}", ChangeBossAI);
-				
-				file.WriteLine("This value can either be True or False (requires the Cheat Sheet mod)");
-				file.WriteLine("Add Cheat Sheet button: {0}", AddCheatSheetButton);
-				
-				file.WriteLine("This value can either be True or False");
-				file.WriteLine("Add /expert command: {0}", AddCommand);
-			}
-		}
-		
-		static void WriteConfigVersion(int version)
-		{
-			using(var file = File.CreateText(ConfigVersionFilePath))
-			{
-				file.WriteLine("DON'T CHANGE THE NUMBER BELOW");
-				file.WriteLine(version);
-				file.WriteLine("Seriously though, if you screw it up your config file might get deleted and the mod might not load.");
-			}
+			Configuration.Clear();
+			Configuration.Put("DropTreasureBagsInNormal", DropBags);
+			Configuration.Put("DemonHeartWorksInNormal", DemonHeartHack);
+			Configuration.Put("ChangeBossAI", ChangeBossAI);
+			Configuration.Put("AddCheatSheetButton", AddCheatSheetButton);
+			Configuration.Put("AddExpertCommand", AddExpertCommand);
+			Configuration.Put("Fun", TransformMatrix);
+			Configuration.Save();
 		}
 	}
 }

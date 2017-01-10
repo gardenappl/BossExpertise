@@ -45,7 +45,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="tModLoader">
-      <HintPath>E:\Yurik\Steam\SteamApps\common\Terraria\tModLoader.exe</HintPath>
+      <HintPath>..\..\..\..\Steam\SteamApps\common\Terraria\tModLoader.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -56,11 +56,12 @@
     <Compile Include="BossExpertise.cs" />
     <Compile Include="CheatSheetIntegration.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="NPC\ExpertGlobalNPC.cs" />
-    <Compile Include="NPC\ExpertNPCInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NPC" />
+    <Compile Include="ExpertGlobalItem.cs" />
+    <Compile Include="ExpertMessageType.cs" />
+    <Compile Include="OldConfig.cs" />
+    <Compile Include="ExpertGlobalNPC.cs" />
+    <Compile Include="ExpertPlayer.cs" />
+    <Compile Include="ExpertNPCInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

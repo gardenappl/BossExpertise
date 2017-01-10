@@ -1,14 +1,18 @@
 ﻿
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BossExpertise
 {
 	public static class CheatSheetIntegration
 	{
-		public static void Load(BossExpertise mod)
+		static BossExpertise mod;
+		
+		public static void Load(BossExpertise bossExpertiseMod)
 		{
+			mod = bossExpertiseMod;
 			var cheatSheetMod = ModLoader.GetMod("CheatSheet");
 			if(cheatSheetMod != null && !Main.dedServ)
 				cheatSheetMod.Call("AddButton_Test", mod.GetTexture("ExpertModeButton"), (Action)ExpertModeButtonPressed, (Func<string>)ExpertModeButtonTooltip);
@@ -21,7 +25,8 @@ namespace BossExpertise
 		
 		public static void ExpertModeButtonPressed()
 		{
-			Main.expertMode = !Main.expertMode;
+//			Main.PlaySound(10);
+			mod.SetExpertMode(!Main.expertMode);
 		}
 	}
 }
