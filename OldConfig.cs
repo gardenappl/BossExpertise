@@ -51,9 +51,13 @@ namespace BossExpertise
 				File.Delete(ConfigPath);
 				File.Delete(ConfigVersionPath);
 				if(Directory.GetFiles(ConfigFolderPath).Length == 0 && Directory.GetDirectories(ConfigFolderPath).Length == 0)
+				{
 					Directory.Delete(ConfigFolderPath);
+				}
 				else
+				{
 					BossExpertise.Log("Outdated config folder still cotains some files/directories. They will not get deleted.");
+				}
 			}
 			catch(Exception e)
 			{

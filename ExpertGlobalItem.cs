@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace BossExpertise
@@ -20,7 +21,7 @@ namespace BossExpertise
 		{
 			if(Config.DemonHeartHack && item.type == ItemID.DemonHeart && !Main.expertMode)
 			{
-				var line = new TooltipLine(mod, "DemonHeart", "Right Click to use!");
+				var line = new TooltipLine(mod, "DemonHeart", Language.GetTextValue("Mods.BossExpertise.RightClickToUse"));
 				line.overrideColor = Colors.RarityRed;
 				tooltips.Insert(2, line);
 			}

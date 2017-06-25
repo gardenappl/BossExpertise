@@ -9,12 +9,10 @@ namespace BossExpertise
 {
 	public class ExpertGlobalNPC : GlobalNPC
 	{
-		public bool FakeExpert;
+		public static bool FakeExpert;
 		
 		public override void ResetEffects(NPC npc)
 		{
-//			if(npc.GetModInfo<ExpertNPCInfo>(mod).FakeExpertMode)
-//				SetFakeExpert(npc, false);
 			if(FakeExpert)
 			{
 				(mod as BossExpertise).SyncExpertMode(false);
@@ -24,9 +22,6 @@ namespace BossExpertise
 		
 		public override bool PreAI(NPC npc)
 		{
-//			if(npc.boss && Config.ChangeBossAI && !Main.expertMode)
-//				SetFakeExpert(npc, true);
-//			return true;
 			if(npc.boss && Config.ChangeBossAI && !Main.expertMode)
 			{
 				FakeExpert = true;
@@ -45,9 +40,6 @@ namespace BossExpertise
 		
 		public override bool PreNPCLoot(NPC npc)
 		{
-//			if(npc.boss && Config.DropBags && !Main.expertMode)
-//				SetFakeExpert(npc, true);
-//			return true;
 			if(npc.boss && Config.DropBags && !Main.expertMode)
 			{
 				FakeExpert = true;
@@ -58,8 +50,6 @@ namespace BossExpertise
 		
 		public override void NPCLoot(NPC npc)
 		{
-//			if(npc.GetModInfo<ExpertNPCInfo>(mod).FakeExpertMode)
-//				SetFakeExpert(npc, false);
 			if(FakeExpert)
 			{
 				FakeExpert = false;
@@ -85,12 +75,5 @@ namespace BossExpertise
 				Main.expertMode = false;
 			}
 		}
-		
-//		void SetFakeExpert(NPC npc, bool expert)
-//		{
-//			var info = npc.GetModInfo<ExpertNPCInfo>(mod);
-//			((BossExpertise)mod).SyncExpertMode(expert);
-//			info.FakeExpertMode = expert;
-//		}
 	}
 }

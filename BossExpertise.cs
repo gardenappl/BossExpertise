@@ -3,75 +3,68 @@ using System;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.IO;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace BossExpertise
 {
 	public class BossExpertise : Mod
-	{	
-		public BossExpertise()
-		{
-			Properties = new ModProperties
-			{
-				Autoload = true,
-				AutoloadGores = true,
-				AutoloadSounds = true
-			};
-		}
-		
+	{
 		public override void Load()
 		{
 			OldConfig.Load();
 			Config.Load();
+			if(Config.AddExpertCommand)
+			{
+				AddCommand("expert", new ExpertCommand());
+			}
+			/* Translation Start */
+			var text = CreateTranslation("NowNormalMode");
+			text.SetDefault("The world is now in Normal Mode.");
+			text.AddTranslation(GameCulture.Russian, "Этот мир теперь в Нормальном режиме.");
+			AddTranslation(text);
+			text = CreateTranslation("NowExpertMode");
+			text.SetDefault("The world is now in Expert Mode!");
+			text.AddTranslation(GameCulture.Russian, "Этот мир теперь в Режиме эксперта!");
+			AddTranslation(text);
+			text = CreateTranslation("AlreadyNormalMode");
+			text.SetDefault("The world is already in Normal Mode.");
+			text.AddTranslation(GameCulture.Russian, "Этот мир уже в Нормальном режиме.");
+			AddTranslation(text);
+			text = CreateTranslation("AlreadyExpertMode");
+			text.SetDefault("The world is already in Expert Mode!");
+			text.AddTranslation(GameCulture.Russian, "Этот мир уже в Режиме эксперта!");
+			AddTranslation(text);
+			text = CreateTranslation("ToggleModePermission");
+			text.SetDefault("Toggle Expert Mode");
+			text.AddTranslation(GameCulture.Russian, "Включать/выключать Режим эксперта");
+			AddTranslation(text);
+			text = CreateTranslation("SwitchToNormal");
+			text.SetDefault("Switch to Normal Mode");
+			text.AddTranslation(GameCulture.Russian, "Перейти в Нормальный режим");
+			AddTranslation(text);
+			text = CreateTranslation("SwitchToExpert");
+			text.SetDefault("Switch to Expert Mode");
+			text.AddTranslation(GameCulture.Russian, "Перейти в Режим эксперта");
+			AddTranslation(text);
+			text = CreateTranslation("ExpertCommandUsage");
+			text.SetDefault("Usage: /expert OR /expert <true|false>");
+			text.AddTranslation(GameCulture.Russian, "Использование: /expert или /expert <true|false>");
+			AddTranslation(text);
+			text = CreateTranslation("RightClickToUse");
+			text.SetDefault("<right> to use!");
+			text.AddTranslation(GameCulture.Russian, "Нажмите <ПКМ>, чтобы использовать!");
+			AddTranslation(text);
+			/* Tranlsation End */
 		}
 		
 		public override void PostSetupContent()
 		{
 			if(Config.AddCheatSheetButton)
-				CheatSheetIntegration.Load(this);
-		}
-		
-		public override void ChatInput(string text, ref bool broadcast)
-		{
-			//argument split code from ExampleMod
-			if (text[0] != '/')
-				return;
-			int index = text.IndexOf(' ');
-			string command;
-			string[] args;
-			if (index < 0)
 			{
-				command = text.Substring(1);
-				args = new string[0];
-			}
-			else
-			{
-				command = text.Substring(1, index - 1);
-				args = text.Substring(index).Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries);
-			}
-			
-			switch(command)
-			{
-				case "expert":
-					if(Config.AddExpertCommand)
-					{
-						if(args.Length == 0)
-							SetExpertMode(!Main.expertMode);
-						else if(args.Length == 1)
-						{
-							if(args[0].Equals("true", StringComparison.OrdinalIgnoreCase))
-								SetExpertMode(true);
-							else if(args[0].Equals("false", StringComparison.OrdinalIgnoreCase))
-								SetExpertMode(false);
-							else
-								Main.NewText("Usage: /expert OR /expert <true|false>");
-						}
-						else
-							Main.NewText("Usage: /expert OR /expert <true|false>");
-						broadcast = false;
-					}
-					return;
+				ModIntegration.Load(this);
 			}
 		}
 		
@@ -82,7 +75,12 @@ namespace BossExpertise
 			switch(msgType)
 			{
 				case ExpertMessageType.SyncExpert:
-					Main.expertMode = reader.ReadBoolean();
+					bool expert = reader.ReadBoolean();
+					Main.expertMode = expert;
+					if(Main.netMode == NetmodeID.Server)
+					{
+						SyncExpertMode(expert, whoAmI);
+					}
 					return;
 				case ExpertMessageType.SyncDemonHeart:
 					var player = Main.player[reader.ReadInt32()];
@@ -91,15 +89,15 @@ namespace BossExpertise
 			}
 		}
 		
-		public void SyncExpertMode(bool expert)
+		public void SyncExpertMode(bool expert, int ignoreClient = -1)
 		{
 			Main.expertMode = expert;
-			if(Main.netMode == 1 || Main.netMode == 2) //Multiplayer
+			if(Main.netMode != NetmodeID.SinglePlayer)
 			{
 				var msg = GetPacket();
 				msg.Write((byte)ExpertMessageType.SyncExpert);
 				msg.Write(expert);
-				msg.Send();
+				msg.Send(ignoreClient: ignoreClient);
 			}
 		}
 		
@@ -108,20 +106,20 @@ namespace BossExpertise
 			if(Main.expertMode && !expert)
 			{
 				SyncExpertMode(false);
-				Main.NewText("This world is now in Normal Mode");
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowNormalMode"));
 			}
 			else if(!Main.expertMode && expert)
 			{
 				SyncExpertMode(true);
-				Main.NewText("This world is now in Expert Mode!", 255, 50, 50);
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowExpertMode"), 255, 50, 50);
 			}
 			else if(!Main.expertMode && !expert)
 			{
-				Main.NewText("This world is already in Normal Mode");
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyNormalMode"));
 			}
 			else
 			{
-				Main.NewText("This world is already in Expert Mode!", 255, 50, 50);
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyExpertMode"), 255, 50, 50);
 			}
 		}
 		

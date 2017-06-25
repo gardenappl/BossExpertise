@@ -1,7 +1,7 @@
 ﻿displayName = Boss Expertise
 author = goldenapple
-version = 2.5.1
-homepage = http://forums.terraria.org/index.php?threads/boss-expertise.41243/
+version = 2.6
+homepage = http://forums.terraria.org/index.php?threads/vanilla-tweaks-other-little-tweak-mods.37443/#BossExpertise
 hideCode = false
 includeSource = true
 buildIgnore = obj\*, bin\*, *.csproj, .git\*, .gitattributes, .gitignore
