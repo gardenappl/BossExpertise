@@ -9,6 +9,11 @@ namespace BossExpertise
 	{
 		public override void ResetEffects()
 		{
+			if(ExpertGlobalNPC.FakeExpert) //an extra check just in case
+			{
+				Main.expertMode = false;
+				ExpertGlobalNPC.FakeExpert = false;
+			}
 			if(Config.DemonHeartHack && player.extraAccessory && !(Main.expertMode || Main.gameMenu))
 				player.extraAccessorySlots++;
 		}

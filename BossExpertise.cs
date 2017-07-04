@@ -89,6 +89,15 @@ namespace BossExpertise
 			}
 		}
 		
+		public override void PreSaveAndQuit()
+		{
+			if(ExpertGlobalNPC.FakeExpert) //an extra check just in case
+			{
+				Main.expertMode = false;
+				ExpertGlobalNPC.FakeExpert = false;
+			}
+		}
+		
 		public void SyncExpertMode(bool expert, int ignoreClient = -1)
 		{
 			Main.expertMode = expert;

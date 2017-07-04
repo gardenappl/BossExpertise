@@ -15,7 +15,7 @@ namespace BossExpertise
 		{
 			if(FakeExpert)
 			{
-				(mod as BossExpertise).SyncExpertMode(false);
+				Main.expertMode = false;
 				FakeExpert = false;
 			}
 		}
@@ -24,8 +24,8 @@ namespace BossExpertise
 		{
 			if(npc.boss && Config.ChangeBossAI && !Main.expertMode)
 			{
+				Main.expertMode = true;
 				FakeExpert = true;
-				(mod as BossExpertise).SyncExpertMode(true);
 			}
 			return base.PreAI(npc);
 		}
@@ -34,7 +34,8 @@ namespace BossExpertise
 		{
 			if(FakeExpert)
 			{
-				(mod as BossExpertise).SyncExpertMode(false);
+				Main.expertMode = false;
+				FakeExpert = false;
 			}
 		}
 		
@@ -42,8 +43,8 @@ namespace BossExpertise
 		{
 			if(npc.boss && Config.DropBags && !Main.expertMode)
 			{
+				Main.expertMode = true;
 				FakeExpert = true;
-				(mod as BossExpertise).SyncExpertMode(true);
 			}
 			return base.PreNPCLoot(npc);
 		}
@@ -52,8 +53,8 @@ namespace BossExpertise
 		{
 			if(FakeExpert)
 			{
+				Main.expertMode = false;
 				FakeExpert = false;
-				(mod as BossExpertise).SyncExpertMode(false);
 			}
 		}
 		
@@ -61,8 +62,8 @@ namespace BossExpertise
 		{
 			if(!Main.expertMode)
 			{
+				Main.expertMode = true;
 				FakeExpert = true;
-				Main.expertMode = true; //drawing is client-side only so there's no need to sync
 			}
 			return base.PreDraw(npc, spriteBatch, drawColor);
 		}
@@ -71,8 +72,8 @@ namespace BossExpertise
 		{
 			if(FakeExpert)
 			{
-				FakeExpert = false;
 				Main.expertMode = false;
+				FakeExpert = false;
 			}
 		}
 	}
