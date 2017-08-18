@@ -12,14 +12,22 @@ namespace BossExpertise
 {
 	public class BossExpertise : Mod
 	{
+		public static BossExpertise Instance;
+		public static bool FKtModSettingsLoaded;
+		
 		public override void Load()
 		{
+			Instance = this;
+			FKtModSettingsLoaded = ModLoader.GetMod("FKTModSettings") != null;
+			
 			OldConfig.Load();
 			Config.Load();
+			if(FKtModSettingsLoaded)
+				Config.LoadFKConfig();
+			
 			if(Config.AddExpertCommand)
-			{
 				AddCommand("expert", new ExpertCommand());
-			}
+			
 			/* Translation Start */
 			var text = CreateTranslation("NowNormalMode");
 			text.SetDefault("The world is now in Normal Mode.");
@@ -63,8 +71,24 @@ namespace BossExpertise
 		public override void PostSetupContent()
 		{
 			if(Config.AddCheatSheetButton)
+				ModIntegration.Load();
+		}
+		
+		public override void PostUpdateInput()
+		{
+			if(FKtModSettingsLoaded && !Main.gameMenu)
+				Config.UpdateFKConfig();
+		}
+		
+		public override void PreSaveAndQuit()
+		{
+			if(FKtModSettingsLoaded)
+				Config.SaveConfig();
+			
+			if(ExpertGlobalNPC.FakeExpert) //an extra check just in case
 			{
-				ModIntegration.Load(this);
+				Main.expertMode = false;
+				ExpertGlobalNPC.FakeExpert = false;
 			}
 		}
 		
@@ -86,15 +110,6 @@ namespace BossExpertise
 					var player = Main.player[reader.ReadInt32()];
 					player.extraAccessory = reader.ReadBoolean();
 					return;
-			}
-		}
-		
-		public override void PreSaveAndQuit()
-		{
-			if(ExpertGlobalNPC.FakeExpert) //an extra check just in case
-			{
-				Main.expertMode = false;
-				ExpertGlobalNPC.FakeExpert = false;
 			}
 		}
 		
@@ -139,39 +154,26 @@ namespace BossExpertise
 		
 		
 		//Fun stuff
-		
-		float prevAngle;
-		float targetAngle;
-		int tick;
+		float Rotation;
+		float Speed;
 		
 		public override Matrix ModifyTransformMatrix(Matrix transform)
 		{
-			if(Config.TransformMatrix)
+//			Main.NewText(Rotation.ToString());
+			if(Config.TransformMatrix && !Main.gameMenu)
 			{
-				float angle = MathHelper.Lerp(prevAngle, targetAngle, 0.05f);
-				prevAngle = angle;
-//				Main.NewText(angle.ToString());
-				
-				if(Main.playerInventory)
-				{
-					tick++;
-					if(tick >= 30)
-					{
-						tick = 0;
-						angle %= 360f;
-						targetAngle = angle + (Main.rand.NextFloat() * 180f - 90f);
-					}
-				}
-				else
-					targetAngle = 0;
+				Rotation = MathHelper.WrapAngle(Rotation + Speed);
+				Speed += 0.001f;
 				
 				float transX = Main.screenWidth / 2;
 				float transY = Main.screenHeight / 2;
 				return transform
 					* Matrix.CreateTranslation(-transX, -transY, 0f)
-					* Matrix.CreateRotationZ(MathHelper.ToRadians(angle))
+					* Matrix.CreateRotationZ(Rotation)
 					* Matrix.CreateTranslation(transX, transY, 0f);
 			}
+			Rotation = 0f;
+			Speed = 0f;
 			return transform;
 		}
 	}

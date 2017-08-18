@@ -9,11 +9,8 @@ namespace BossExpertise
 {
 	public static class ModIntegration
 	{
-		static BossExpertise mod;
-		
-		public static void Load(BossExpertise bossExpertiseMod)
+		public static void Load()
 		{
-			mod = bossExpertiseMod;
 			var cheatSheetMod = ModLoader.GetMod("CheatSheet");
 			if(cheatSheetMod != null && !Main.dedServ)
 			{
@@ -37,7 +34,7 @@ namespace BossExpertise
 		
 		public static void OnButtonPressed()
 		{
-			mod.SetExpertMode(!Main.expertMode);
+			BossExpertise.Instance.SetExpertMode(!Main.expertMode);
 		}
 		
 		public static void OnPermissionChanged(bool hasPermission)

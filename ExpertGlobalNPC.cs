@@ -3,6 +3,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace BossExpertise
@@ -22,7 +23,7 @@ namespace BossExpertise
 		
 		public override bool PreAI(NPC npc)
 		{
-			if(npc.boss && Config.ChangeBossAI && !Main.expertMode)
+			if((npc.boss || npc.type == NPCID.DD2Betsy) && Config.ChangeBossAI && !Main.expertMode)
 			{
 				Main.expertMode = true;
 				FakeExpert = true;
@@ -41,7 +42,7 @@ namespace BossExpertise
 		
 		public override bool PreNPCLoot(NPC npc)
 		{
-			if(npc.boss && Config.DropBags && !Main.expertMode)
+			if((npc.boss || npc.type == NPCID.DD2Betsy) && Config.DropBags && !Main.expertMode)
 			{
 				Main.expertMode = true;
 				FakeExpert = true;
