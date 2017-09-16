@@ -22,7 +22,7 @@ namespace BossExpertise
 			
 			OldConfig.Load();
 			Config.Load();
-			if(FKtModSettingsLoaded)
+			if(FKtModSettingsLoaded && !Main.dedServ)
 				Config.LoadFKConfig();
 			
 			if(Config.AddExpertCommand)
@@ -76,13 +76,13 @@ namespace BossExpertise
 		
 		public override void PostUpdateInput()
 		{
-			if(FKtModSettingsLoaded && !Main.gameMenu)
+			if(FKtModSettingsLoaded && !Main.dedServ && !Main.gameMenu)
 				Config.UpdateFKConfig();
 		}
 		
 		public override void PreSaveAndQuit()
 		{
-			if(FKtModSettingsLoaded)
+			if(FKtModSettingsLoaded && !Main.dedServ)
 				Config.SaveConfig();
 			
 			if(ExpertGlobalNPC.FakeExpert) //an extra check just in case
