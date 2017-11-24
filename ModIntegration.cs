@@ -14,7 +14,7 @@ namespace BossExpertise
 			var cheatSheetMod = ModLoader.GetMod("CheatSheet");
 			if(cheatSheetMod != null && !Main.dedServ)
 			{
-				cheatSheetMod.Call("AddButton_Test", Main.buffTexture[BuffID.Horrified], (Action)OnButtonPressed, (Func<string>)GetButtonTooltip);
+				cheatSheetMod.Call("AddButton_Test", BossExpertise.Instance.GetTexture("ExpertModeButton"), (Action)OnButtonPressed, (Func<string>)GetButtonTooltip);
 			}
 			var herosMod = ModLoader.GetMod("HEROsMod");
 			if(herosMod != null)
@@ -22,7 +22,7 @@ namespace BossExpertise
 				herosMod.Call("AddPermission", "ToggleExpertMode", Language.GetTextValue("Mods.BossExpertise.ToggleModePermission"));
 				if(!Main.dedServ)
 				{
-					herosMod.Call("AddSimpleButton", "ToggleExpertMode", Main.buffTexture[BuffID.Horrified], (Action)OnButtonPressed, (Action<bool>)OnPermissionChanged, (Func<string>)GetButtonTooltip);
+					herosMod.Call("AddSimpleButton", "ToggleExpertMode", BossExpertise.Instance.GetTexture("ExpertModeButton"), (Action)OnButtonPressed, (Action<bool>)OnPermissionChanged, (Func<string>)GetButtonTooltip);
 				}
 			}
 		}
