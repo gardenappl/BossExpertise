@@ -20,58 +20,18 @@ namespace BossExpertise
 			Instance = this;
 			FKtModSettingsLoaded = ModLoader.GetMod("FKTModSettings") != null;
 			
-			OldConfig.Load();
 			Config.Load();
 			if(FKtModSettingsLoaded && !Main.dedServ)
 				Config.LoadFKConfig();
 			
 			if(Config.AddExpertCommand)
 				AddCommand("expert", new ExpertCommand());
-			
-			/* Translation Start */
-			var text = CreateTranslation("NowNormalMode");
-			text.SetDefault("The world is now in Normal Mode.");
-			text.AddTranslation(GameCulture.Russian, "Этот мир теперь в Нормальном режиме.");
-			AddTranslation(text);
-			text = CreateTranslation("NowExpertMode");
-			text.SetDefault("The world is now in Expert Mode!");
-			text.AddTranslation(GameCulture.Russian, "Этот мир теперь в Режиме эксперта!");
-			AddTranslation(text);
-			text = CreateTranslation("AlreadyNormalMode");
-			text.SetDefault("The world is already in Normal Mode.");
-			text.AddTranslation(GameCulture.Russian, "Этот мир уже в Нормальном режиме.");
-			AddTranslation(text);
-			text = CreateTranslation("AlreadyExpertMode");
-			text.SetDefault("The world is already in Expert Mode!");
-			text.AddTranslation(GameCulture.Russian, "Этот мир уже в Режиме эксперта!");
-			AddTranslation(text);
-			text = CreateTranslation("ToggleModePermission");
-			text.SetDefault("Toggle Expert Mode");
-			text.AddTranslation(GameCulture.Russian, "Включать/выключать Режим эксперта");
-			AddTranslation(text);
-			text = CreateTranslation("SwitchToNormal");
-			text.SetDefault("Switch to Normal Mode");
-			text.AddTranslation(GameCulture.Russian, "Перейти в Нормальный режим");
-			AddTranslation(text);
-			text = CreateTranslation("SwitchToExpert");
-			text.SetDefault("Switch to Expert Mode");
-			text.AddTranslation(GameCulture.Russian, "Перейти в Режим эксперта");
-			AddTranslation(text);
-			text = CreateTranslation("ExpertCommandUsage");
-			text.SetDefault("Usage: /expert OR /expert <true|false>");
-			text.AddTranslation(GameCulture.Russian, "Использование: /expert или /expert <true|false>");
-			AddTranslation(text);
-			text = CreateTranslation("RightClickToUse");
-			text.SetDefault("<right> to use!");
-			text.AddTranslation(GameCulture.Russian, "Нажмите <ПКМ>, чтобы использовать!");
-			AddTranslation(text);
-			/* Tranlsation End */
 		}
 		
 		public override void PostSetupContent()
 		{
 			if(Config.AddCheatSheetButton)
-				ModIntegration.Load();
+				CheatSheetIntegration.Load();
 		}
 		
 		public override void PostUpdateInput()
@@ -151,30 +111,51 @@ namespace BossExpertise
 		{
 			ErrorLogger.Log("[Boss Expertise] " + string.Format(message.ToString(), formatData));
 		}
-		
-		
-		//Fun stuff
-		float Rotation;
-		float Speed;
-		
-		public override Matrix ModifyTransformMatrix(Matrix transform)
+
+
+		/* Fun stuff (does not work anymore) */
+
+		//		float Rotation;
+		//		float Speed;
+
+		//		public override Matrix ModifyTransformMatrix(Matrix transform)
+		//		{
+		////			Main.NewText(Rotation.ToString());
+		//			if(Config.TransformMatrix && !Main.gameMenu)
+		//			{
+		//				Rotation = MathHelper.WrapAngle(Rotation + Speed);
+		//				Speed += 0.001f;
+
+		//				float transX = Main.screenWidth / 2;
+		//				float transY = Main.screenHeight / 2;
+		//				return transform
+		//					* Matrix.CreateTranslation(-transX, -transY, 0f)
+		//					* Matrix.CreateRotationZ(Rotation)
+		//					* Matrix.CreateTranslation(transX, transY, 0f);
+		//			}
+		//			Rotation = 0f;
+		//			Speed = 0f;
+		//			return transform;
+		//		}
+
+		#region Hamstar's Mod Helpers integration
+
+		public static string GithubUserName { get { return "goldenapple3"; } }
+		public static string GithubProjectName { get { return "BossExpertise"; } }
+
+		public static string ConfigFileRelativePath { get { return "Mod Configs/Boss Expertise.json"; } }
+
+		public static void ReloadConfigFromFile()
 		{
-//			Main.NewText(Rotation.ToString());
-			if(Config.TransformMatrix && !Main.gameMenu)
-			{
-				Rotation = MathHelper.WrapAngle(Rotation + Speed);
-				Speed += 0.001f;
-				
-				float transX = Main.screenWidth / 2;
-				float transY = Main.screenHeight / 2;
-				return transform
-					* Matrix.CreateTranslation(-transX, -transY, 0f)
-					* Matrix.CreateRotationZ(Rotation)
-					* Matrix.CreateTranslation(transX, transY, 0f);
-			}
-			Rotation = 0f;
-			Speed = 0f;
-			return transform;
+			Config.Load();
 		}
+
+		public static void ResetConfigFromDefaults()
+		{
+			Config.SetDefaults();
+			Config.SaveConfig();
+		}
+
+		#endregion
 	}
 }

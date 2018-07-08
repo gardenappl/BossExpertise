@@ -12,13 +12,13 @@ namespace BossExpertise
 		public static bool DropBags;
 		const string DropBagsKey = "DropTreasureBagsInNormal";
 		
-		public static bool AddCheatSheetButton = true;
+		public static bool AddCheatSheetButton;
 		const string AddCheatSheetButtonKey = "AddCheatSheetButton";
 		
-		public static bool ChangeBossAI = true;
+		public static bool ChangeBossAI;
 		const string ChangeBossAIKey = "ChangeBossAI";
 		
-		public static bool AddExpertCommand = true;
+		public static bool AddExpertCommand;
 		const string AddExpertCommandKey = "AddExpertCommand";
 		
 		public static bool DemonHeartHack;
@@ -28,38 +28,28 @@ namespace BossExpertise
 		const string TransformMatrixKey = "Fun";
 		
 		static string ConfigPath = Path.Combine(Main.SavePath, "Mod Configs", "Boss Expertise.json");
-		
-		static string OldConfigFolderPath = Path.Combine(Main.SavePath, "Mod Configs", "Boss Expertise");
-		static string OldConfigPath = Path.Combine(OldConfigFolderPath, "config.json");
-		static string OldConfigVersionPath = Path.Combine(OldConfigFolderPath, "config.version");
-		
 		static Preferences Configuration = new Preferences(ConfigPath);
-		
+
+		public static void SetDefaults()
+		{
+			DropBags = false;
+			AddCheatSheetButton = true;
+			ChangeBossAI = true;
+			AddExpertCommand = true;
+			DemonHeartHack = false;
+			TransformMatrix = false;
+		}
+
 		public static void Load()
 		{
-			if(Directory.Exists(OldConfigFolderPath))
+			if(!ConfigLegacy.Load())
 			{
-				if(File.Exists(OldConfigPath))
-				{
-					BossExpertise.Log("Found config file in old folder! Moving config...");
-					File.Move(OldConfigPath, ConfigPath);
-				}
-				if(File.Exists(OldConfigVersionPath))
-				{
-					File.Delete(OldConfigVersionPath);
-				}
-				if(Directory.GetFiles(OldConfigFolderPath).Length == 0 && Directory.GetDirectories(OldConfigFolderPath).Length == 0)
-				{
-					Directory.Delete(OldConfigFolderPath);
-				}
-				else
-				{
-					BossExpertise.Log("Old config folder still cotains some files/directories. They will not get deleted.");
-				}
+				SetDefaults();
 			}
+
 			if(!ReadConfig())
 			{
-				BossExpertise.Log("Failed to read config file! Recreating config...");
+				BossExpertise.Log("Failed to read config file! Creating config...");
 				SaveConfig();
 			}
 		}

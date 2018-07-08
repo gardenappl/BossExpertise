@@ -1,0 +1,9 @@
+﻿NowNormalMode=Этот мир теперь в Нормальном режиме.
+NowExpertMode=Этот мир теперь в Режиме эксперта!
+AlreadyNormalMode=Этот мир уже в Нормальном режиме.
+AlreadyExpertMode=Этот мир уже в Режиме эксперта!
+ToggleModePermission=Включать/выключать Режим эксперта
+SwitchToNormal=Перейти в Нормальный режим
+SwitchToExpert=Перейти в Режим эксперта
+ExpertCommandUsage=Использование: /expert или /expert <true|false>
+RightClickToUse=Нажмите <ПКМ>, чтобы использовать!

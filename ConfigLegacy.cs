@@ -5,17 +5,19 @@ using Terraria;
 
 namespace BossExpertise
 {
-	public static class OldConfig
+	public static class ConfigLegacy
 	{
 		static string ConfigFolderPath = Path.Combine(Main.SavePath, "Mod Configs", "BossExpertise");
 		static string ConfigPath = Path.Combine(ConfigFolderPath, "config.txt");
 		static string ConfigVersionPath = Path.Combine(ConfigFolderPath, "configVersion.txt");
-		
-		public static void Load()
+
+		public static bool Load()
 		{
 			if(!Directory.Exists(ConfigFolderPath))
-				return;
-			
+				return false;
+
+			bool success = false;
+
 			if(File.Exists(ConfigPath))
 			{
 				BossExpertise.Log("Found config file with old format! Reading outdated config...");
@@ -24,15 +26,17 @@ namespace BossExpertise
 				{
 					file.ReadLine();
 					bool.TryParse(file.ReadLine().Split(':')[1], out Config.DropBags);
-					
+
 					file.ReadLine();
 					bool.TryParse(file.ReadLine().Split(':')[1], out Config.ChangeBossAI);
-					
+
 					file.ReadLine();
 					bool.TryParse(file.ReadLine().Split(':')[1], out Config.AddCheatSheetButton);
-					
+
 					file.ReadLine();
 					bool.TryParse(file.ReadLine().Split(':')[1], out Config.AddExpertCommand);
+
+					success = true;
 				}
 				catch(Exception e)
 				{
@@ -44,7 +48,7 @@ namespace BossExpertise
 					file.Dispose();
 				}
 			}
-			
+
 			BossExpertise.Log("Deleting outdated config...");
 			try
 			{
@@ -64,6 +68,7 @@ namespace BossExpertise
 				BossExpertise.Log("Unable to delete old config!");
 				BossExpertise.Log(e.ToString());
 			}
+			return success;
 		}
 	}
 }

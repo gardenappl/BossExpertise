@@ -1,0 +1,9 @@
+﻿NowNormalMode=The world is now in Normal Mode.
+NowExpertMode=The world is now in Expert Mode!
+AlreadyNormalMode=The world is already in Normal Mode.
+AlreadyExpertMode=The world is already in Expert Mode!
+ToggleModePermission=Toggle Expert Mode
+SwitchToNormal=Switch to Normal Mode
+SwitchToExpert=Switch to Expert Mode
+ExpertCommandUsage=Usage: /expert OR /expert <true|false>
+RightClickToUse=<right> to use!

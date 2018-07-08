@@ -1,8 +1,7 @@
 ﻿displayName = Boss Expertise
-author = goldenapple, Zerokk
-version = 2.7.2
+author = goldenapple
+version = 2.7.3
 homepage = http://forums.terraria.org/index.php?threads/vanilla-tweaks-other-little-tweak-mods.37443/#BossExpertise
 hideCode = false
-includeSource = true
 buildIgnore = obj\*, bin\*, *.csproj, .git\*, .gitattributes, .gitignore
 weakReferences = FKTModSettings

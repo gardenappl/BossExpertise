@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace BossExpertise
 {
-	public static class ModIntegration
+	public static class CheatSheetIntegration
 	{
 		public static void Load()
 		{
