@@ -3,5 +3,4 @@ author = goldenapple
 version = 2.8
 homepage = http://forums.terraria.org/index.php?threads/vanilla-tweaks-other-little-tweak-mods.37443/#BossExpertise
 hideCode = false
-buildIgnore = obj\*, bin\*, *.csproj, .git\*, .gitattributes, .gitignore
-weakReferences = FKTModSettings
+buildIgnore = obj\*, bin\*, *.csproj, .git\*, .gitattributes, .gitignore, .vs\*, Properties\*, *.sln

@@ -20,7 +20,7 @@ namespace BossExpertise
 
 			if(File.Exists(ConfigPath))
 			{
-				BossExpertise.Log("Found config file with old format! Reading outdated config...");
+				BossExpertise.Instance.Logger.Warn("Found config file with old format! Reading outdated config...");
 				var file = new StreamReader(ConfigPath);
 				try
 				{
@@ -40,8 +40,7 @@ namespace BossExpertise
 				}
 				catch(Exception e)
 				{
-					BossExpertise.Log("Unable to read old config file!");
-					BossExpertise.Log(e.ToString());
+					BossExpertise.Instance.Logger.Error("Unable to read old config file!", e);
 				}
 				finally
 				{
@@ -49,7 +48,7 @@ namespace BossExpertise
 				}
 			}
 
-			BossExpertise.Log("Deleting outdated config...");
+			BossExpertise.Instance.Logger.Warn("Deleting outdated config...");
 			try
 			{
 				File.Delete(ConfigPath);
@@ -60,13 +59,12 @@ namespace BossExpertise
 				}
 				else
 				{
-					BossExpertise.Log("Outdated config folder still cotains some files/directories. They will not get deleted.");
+					BossExpertise.Instance.Logger.Warn("Outdated config folder still cotains some files/directories. They will not get deleted.");
 				}
 			}
 			catch(Exception e)
 			{
-				BossExpertise.Log("Unable to delete old config!");
-				BossExpertise.Log(e.ToString());
+				BossExpertise.Instance.Logger.Error("Unable to delete old config!", e);
 			}
 			return success;
 		}

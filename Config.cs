@@ -49,7 +49,7 @@ namespace BossExpertise
 
 			if(!ReadConfig())
 			{
-				BossExpertise.Log("Failed to read config file! Creating config...");
+				BossExpertise.Instance.Logger.Warn("Failed to read config file! Creating config...");
 				SaveConfig();
 			}
 		}
@@ -79,39 +79,6 @@ namespace BossExpertise
 			Configuration.Put(AddExpertCommandKey, AddExpertCommand);
 //			Configuration.Put(TransformMatrixKey, TransformMatrix);
 			Configuration.Save();
-		}
-		
-		public static void LoadFKConfig()
-		{
-			var setting = FKTModSettings.ModSettingsAPI.CreateModSettingConfig(BossExpertise.Instance);
-
-			setting.AddComment("Features marked with an asterisk (*) require a mod reload to update properly.");
-			setting.AddComment("Some values are only modifiable in singleplayer.");
-			
-			const float commentScale = 0.8f;
-			
-			setting.AddBool(ChangeBossAIKey, "Expert Boss AI in Normal Mode", false);
-			setting.AddBool(DropBagsKey, "Drop Treasure Bags in Normal Mode", false);
-			setting.AddBool(DemonHeartHackKey, "Demon Heart works in Normal Mode", false);
-			setting.AddBool(AddCheatSheetButtonKey, "Add Cheat Sheet/HERO's Mod integration*", true);
-			setting.AddBool(AddExpertCommandKey, "Add /expert chat command*", true);
-//			setting.AddComment("Activates fun.\n" +
-//			                   "WARNING: excessive amounts of fun may cause dizziness, seizures, unplayability and spontaneous combustion of your computer. Parental supervision is advised.", commentScale);
-//			setting.AddBool(TransformMatrixKey, "Fun!", true);
-		}
-		
-		public static void UpdateFKConfig()
-		{
-			FKTModSettings.ModSetting setting;
-			if(FKTModSettings.ModSettingsAPI.TryGetModSetting(BossExpertise.Instance, out setting))
-			{
-				setting.Get(ChangeBossAIKey, ref ChangeBossAI);
-				setting.Get(DropBagsKey, ref DropBags);
-				setting.Get(DemonHeartHackKey, ref DemonHeartHack);
-				setting.Get(AddCheatSheetButtonKey, ref AddCheatSheetButton);
-				setting.Get(AddExpertCommandKey, ref AddExpertCommand);
-//				setting.Get(TransformMatrixKey, ref TransformMatrix);
-			}
 		}
 		
 		class MultiplayerSyncWorld : ModWorld
