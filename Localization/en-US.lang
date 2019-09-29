@@ -1,4 +1,9 @@
-﻿NowNormalMode=The world is now in Normal Mode.
+﻿-----------
+
+ItemName.FakeDemonHeart=Fake Demon Heart
+ItemTooltip.FakeDemonHeart=You're not supposed to have this item in your inventory!\nDrop it on the ground to get a regular Demon Heart back.
+
+NowNormalMode=The world is now in Normal Mode.
 NowExpertMode=The world is now in Expert Mode!
 AlreadyNormalMode=The world is already in Normal Mode.
 AlreadyExpertMode=The world is already in Expert Mode!
@@ -6,4 +11,25 @@ ToggleModePermission=Toggle Expert Mode
 SwitchToNormal=Switch to Normal Mode
 SwitchToExpert=Switch to Expert Mode
 ExpertCommandUsage=Usage: /expert OR /expert <true|false>
-RightClickToUse=<right> to use!
+
+Config=Settings
+Config.ServerBlocked=Only the server owner can change the settings.
+
+Config.AddCheatSheetButton=Add Cheat Sheet/HERO's Mod button
+Config.AddCheatSheetButton.Desc=Add a button that toggles Expert Mode to the Cheat Sheet mod and HERO's Mod.
+
+Config.ChangeAI=Change Boss AI
+Config.ChangeAI.Desc=Bring Expert Mode boss AI into Normal Mode.\n(Warning: may break some modded bosses)
+
+Config.DropBags=Treasure Bags in Normal Mode
+
+Config.ExpertCommand=Add /expert command
+Config.ExpertCommand.Desc=Add the /expert chat command that toggles Expert Mode.
+
+Config.DemonHeartHack=Demon Heart works in Normal Mode
+
+Config.BossBlacklist=Boss Blacklist
+Config.BossBlacklist.Desc=These bosses won't be affected by Boss Expertise.
+
+Config.BossWhitelist=Boss Whitelist
+Config.BossWhitelist.Desc=These NPCs will be affected by Boss Expertise\neven if they're technically not bosses.

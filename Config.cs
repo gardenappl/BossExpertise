@@ -1,113 +1,67 @@
-﻿
-using System;
-using System.IO;
-using Terraria;
-using Terraria.IO;
-using Terraria.ModLoader;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader.Config;
 
 namespace BossExpertise
 {
-	public static class Config
+	[Label("$Mods.BossExpertise.Config")]
+	public class Config : ModConfig
 	{
-		public static bool DropBags;
-		const string DropBagsKey = "DropTreasureBagsInNormal";
-		
-		public static bool AddCheatSheetButton;
-		const string AddCheatSheetButtonKey = "AddCheatSheetButton";
-		
-		public static bool ChangeBossAI;
-		const string ChangeBossAIKey = "ChangeBossAI";
-		
-		public static bool AddExpertCommand;
-		const string AddExpertCommandKey = "AddExpertCommand";
-		
-		public static bool DemonHeartHack;
-		const string DemonHeartHackKey = "DemonHeartWorksInNormal";
-		
-		public static bool TransformMatrix;
-		const string TransformMatrixKey = "Fun";
-		
-		static string ConfigPath = Path.Combine(Main.SavePath, "Mod Configs", "Boss Expertise.json");
-		static Preferences Configuration = new Preferences(ConfigPath);
+		public override ConfigScope Mode => ConfigScope.ServerSide;
 
-		public static void SetDefaults()
-		{
-			DropBags = false;
-			AddCheatSheetButton = true;
-			ChangeBossAI = true;
-			AddExpertCommand = true;
-			DemonHeartHack = false;
-			TransformMatrix = false;
-		}
+		public static Config Instance;
 
-		public static void Load()
+		//Load the config manually after handling LegacyConfigs
+		public override bool Autoload(ref string name)
 		{
-			if(!ConfigLegacy.Load())
-			{
-				SetDefaults();
-			}
-
-			if(!ReadConfig())
-			{
-				BossExpertise.Instance.Logger.Warn("Failed to read config file! Creating config...");
-				SaveConfig();
-			}
-		}
-		
-		public static bool ReadConfig()
-		{
-			if(Configuration.Load())
-			{
-				Configuration.Get(DropBagsKey, ref DropBags);
-				Configuration.Get(DemonHeartHackKey, ref DemonHeartHack);
-				Configuration.Get(ChangeBossAIKey, ref ChangeBossAI);
-				Configuration.Get(AddCheatSheetButtonKey, ref AddCheatSheetButton);
-				Configuration.Get(AddExpertCommandKey, ref AddExpertCommand);
-//				Configuration.Get(TransformMatrixKey, ref TransformMatrix);
-				return true;
-			}
 			return false;
 		}
-		
-		public static void SaveConfig()
+
+		public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message)
 		{
-			Configuration.Clear();
-			Configuration.Put(DropBagsKey, DropBags);
-			Configuration.Put(DemonHeartHackKey, DemonHeartHack);
-			Configuration.Put(ChangeBossAIKey, ChangeBossAI);
-			Configuration.Put(AddCheatSheetButtonKey, AddCheatSheetButton);
-			Configuration.Put(AddExpertCommandKey, AddExpertCommand);
-//			Configuration.Put(TransformMatrixKey, TransformMatrix);
-			Configuration.Save();
+			message = Language.GetTextValue("Mods.BossExpertise.Config.ServerBlocked");
+			return false;
 		}
-		
-		class MultiplayerSyncWorld : ModWorld
-		{
-			public override void NetSend(BinaryWriter writer)
-			{
-				var data = new BitsByte();
-				data[0] = ChangeBossAI;
-				data[1] = DropBags;
-				data[2] = DemonHeartHack;
-				writer.Write((byte)data);
-			}
-			
-			public override void NetReceive(BinaryReader reader)
-			{
-				SaveConfig();
-				var data = (BitsByte)reader.ReadByte();
-				ChangeBossAI = data[0];
-				DropBags = data[1];
-				DemonHeartHack = data[2];
-			}
-		}
-		
-		class MultiplayerSyncPlayer : ModPlayer
-		{
-			public override void PlayerDisconnect(Player player)
-			{
-				ReadConfig();
-			}
-		}
+
+		[Label("$Mods.BossExpertise.Config.DropBags")]
+		[DefaultValue(false)]
+		public bool DropTreasureBagsInNormal;
+
+		[Label("$Mods.BossExpertise.Config.AddCheatSheetButton")]
+		[Tooltip("$Mods.BossExpertise.Config.AddCheatSheetButton.Desc")]
+		[ReloadRequired]
+		[DefaultValue(true)]
+		public bool AddCheatSheetButton;
+
+		[Label("$Mods.BossExpertise.Config.ChangeAI")]
+		[Tooltip("$Mods.BossExpertise.Config.ChangeAI.Desc")]
+		[DefaultValue(true)]
+		public bool ChangeBossAI;
+
+		[Label("$Mods.BossExpertise.Config.BossBlacklist")]
+		[Tooltip("$Mods.BossExpertise.Config.BossBlacklist.Desc")]
+		public List<NPCDefinition> BossBlacklist = new List<NPCDefinition>();
+
+		[Label("$Mods.BossExpertise.Config.BossWhitelist")]
+		[Tooltip("$Mods.BossExpertise.Config.BossWhitelist.Desc")]
+		public List<NPCDefinition> BossWhitelist = new List<NPCDefinition>
+				{
+					new NPCDefinition(NPCID.DD2Betsy)
+				};
+
+		[Label("$Mods.BossExpertise.Config.ExpertCommand")]
+		[Tooltip("$Mods.BossExpertise.Config.ExpertCommand.Desc")]
+		[ReloadRequired]
+		[DefaultValue(true)]
+		public bool AddExpertCommand;
+
+		[Label("$Mods.BossExpertise.Config.DemonHeartHack")]
+		public bool DemonHeartWorksInNormal;
 	}
 }

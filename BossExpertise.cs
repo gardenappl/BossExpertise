@@ -17,16 +17,19 @@ namespace BossExpertise
 		public override void Load()
 		{
 			Instance = this;
+
+			LegacyConfigV1.Load();
+			LegacyConfigV2.Load();
+
+			AddConfig("Config", new Config());
 			
-			Config.Load();
-			
-			if(Config.AddExpertCommand)
+			if(Config.Instance.AddExpertCommand)
 				AddCommand("expert", new ExpertCommand());
 		}
 		
 		public override void PostSetupContent()
 		{
-			if(Config.AddCheatSheetButton)
+			if(Config.Instance.AddCheatSheetButton)
 				CheatSheetIntegration.Load();
 		}
 		
@@ -65,7 +68,7 @@ namespace BossExpertise
 			}
 		}
 		
-		public void SyncExpertMode(bool expert, int ignoreClient = -1)
+		void SyncExpertMode(bool expert, int ignoreClient = -1)
 		{
 			Main.expertMode = expert;
 			if(Main.netMode != NetmodeID.SinglePlayer)

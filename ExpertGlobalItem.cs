@@ -11,41 +11,16 @@ namespace BossExpertise
 {
 	public class ExpertGlobalItem : GlobalItem
 	{
-		public override void SetDefaults(Item item)
+		public override bool CanUseItem(Item item, Player player)
 		{
-			if(Config.DemonHeartHack && item.type == ItemID.DemonHeart)
-				item.maxStack = 1;
-		}
-		
-		public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-		{
-			if(Config.DemonHeartHack && item.type == ItemID.DemonHeart && !Main.expertMode)
+			if (item.type == ItemID.DemonHeart && !player.extraAccessory &&
+					!Main.expertMode && Config.Instance.DemonHeartWorksInNormal)
 			{
-				var line = new TooltipLine(mod, "DemonHeart", Language.GetTextValue("Mods.BossExpertise.RightClickToUse"));
-				line.overrideColor = Colors.RarityRed;
-				tooltips.Insert(2, line);
+				int stack = item.stack;
+				item.SetDefaults(mod.ItemType<FakeDemonHeart>());
+				item.stack = stack;
 			}
-		}
-		
-		public override bool CanRightClick(Item item)
-		{
-			return Config.DemonHeartHack && item.type == ItemID.DemonHeart && !Main.player[Main.myPlayer].extraAccessory && !Main.expertMode;
-		}
-		
-		public override void RightClick(Item item, Player player)
-		{
-			if (Config.DemonHeartHack && item.type == ItemID.DemonHeart && !player.extraAccessory)
-			{
-				player.extraAccessory = true;
-				if (Main.netMode == 1 || Main.netMode == 2)
-				{
-					var msg = mod.GetPacket();
-					msg.Write((byte)ExpertMessageType.SyncDemonHeart);
-					msg.Write(player.whoAmI);
-					msg.Write(true);
-					msg.Send();
-				}
-			}
+			return true;
 		}
 	}
 }

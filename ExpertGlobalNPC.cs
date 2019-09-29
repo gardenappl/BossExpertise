@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 namespace BossExpertise
 {
@@ -14,16 +15,28 @@ namespace BossExpertise
 		
 		public override void ResetEffects(NPC npc)
 		{
-			if(FakeExpert)
+			if (FakeExpert)
 			{
 				Main.expertMode = false;
 				FakeExpert = false;
 			}
 		}
+
+		bool ShouldModifyNPC(NPC npc)
+		{
+			if (!Config.Instance.ChangeBossAI)
+				return false;
+			if (Config.Instance.BossBlacklist.Contains(new NPCDefinition(npc.type)))
+				return false;
+			else if (Config.Instance.BossWhitelist.Contains(new NPCDefinition(npc.type)))
+				return true;
+
+			return npc.boss;
+		}
 		
 		public override bool PreAI(NPC npc)
 		{
-			if((npc.boss || npc.type == NPCID.DD2Betsy) && Config.ChangeBossAI && !Main.expertMode)
+			if (Config.Instance.ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
 				Main.expertMode = true;
 				FakeExpert = true;
@@ -33,7 +46,7 @@ namespace BossExpertise
 		
 		public override void PostAI(NPC npc)
 		{
-			if(FakeExpert)
+			if (FakeExpert)
 			{
 				Main.expertMode = false;
 				FakeExpert = false;
@@ -42,7 +55,7 @@ namespace BossExpertise
 		
 		public override bool PreNPCLoot(NPC npc)
 		{
-			if((npc.boss || npc.type == NPCID.DD2Betsy) && Config.DropBags && !Main.expertMode)
+			if(Config.Instance.DropTreasureBagsInNormal && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
 				Main.expertMode = true;
 				FakeExpert = true;
@@ -61,7 +74,7 @@ namespace BossExpertise
 		
 		public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
 		{
-			if(!Main.expertMode)
+			if(Config.Instance.ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
 				Main.expertMode = true;
 				FakeExpert = true;
