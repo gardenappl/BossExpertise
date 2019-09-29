@@ -2,4 +2,3 @@
 Then this mod is probably for you! Boss Expertise makes bosses behave like they're in Expert Mode, even though their stats don't change.
 BossExpertise also adds some optional features (like bosses dropping Treasure Bags in Normal Mode), which are disabled by default.
 Also allows you to toggle Expert Mode via chat command (/expert), Cheat Sheet or HERO's Mod.
-Visit the Forum Thread for info about how to enable/disable optional features.
