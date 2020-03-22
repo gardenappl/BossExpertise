@@ -16,7 +16,7 @@ namespace BossExpertise
 		{
 			if(File.Exists(ConfigPath))
 			{
-				BossExpertise.Instance.Logger.Warn("Found config file in old location. Moving config...");
+                ModContent.GetInstance<BossExpertise>().Logger.Warn("Found config file in old location. Moving config...");
 				string newPath = Path.Combine(ConfigManager.ModConfigPath, "BossExpertise_Config.json");
 				File.Move(ConfigPath, newPath);
 			}

@@ -14,7 +14,7 @@ namespace BossExpertise
 				Main.expertMode = false;
 				ExpertGlobalNPC.FakeExpert = false;
 			}
-			if(Config.Instance.DemonHeartWorksInNormal && player.extraAccessory && !(Main.expertMode || Main.gameMenu))
+			if(ModContent.GetInstance<Config>().DemonHeartWorksInNormal && player.extraAccessory && !(Main.expertMode || Main.gameMenu))
 				player.extraAccessorySlots++;
 		}
 	}

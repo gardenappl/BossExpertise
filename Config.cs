@@ -15,8 +15,6 @@ namespace BossExpertise
 	{
 		public override ConfigScope Mode => ConfigScope.ServerSide;
 
-		public static Config Instance;
-
 		//Load the config manually after handling LegacyConfigs
 		public override bool Autoload(ref string name)
 		{

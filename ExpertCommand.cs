@@ -17,17 +17,17 @@ namespace BossExpertise
 		{
 			if(args.Length == 0)
 			{
-				(mod as BossExpertise).SetExpertMode(!Main.expertMode);
+                ModContent.GetInstance<BossExpertise>().SetExpertMode(!Main.expertMode);
 			}
 			else if(args.Length == 1)
 			{
 				if(args[0].Equals("true", StringComparison.OrdinalIgnoreCase))
 				{
-					(mod as BossExpertise).SetExpertMode(true);
+                    ModContent.GetInstance<BossExpertise>().SetExpertMode(true);
 				}
 				else if(args[0].Equals("false", StringComparison.OrdinalIgnoreCase))
 				{
-					(mod as BossExpertise).SetExpertMode(false);
+                    ModContent.GetInstance<BossExpertise>().SetExpertMode(false);
 				}
 				else
 				{

@@ -14,7 +14,7 @@ namespace BossExpertise
 			var cheatSheetMod = ModLoader.GetMod("CheatSheet");
 			if(cheatSheetMod != null && !Main.dedServ)
 			{
-				cheatSheetMod.Call("AddButton_Test", BossExpertise.Instance.GetTexture("ExpertModeButton"), (Action)OnButtonPressed, (Func<string>)GetButtonTooltip);
+				cheatSheetMod.Call("AddButton_Test", ModContent.GetInstance<BossExpertise>().GetTexture("ExpertModeButton"), (Action)OnButtonPressed, (Func<string>)GetButtonTooltip);
 			}
 			var herosMod = ModLoader.GetMod("HEROsMod");
 			if(herosMod != null)
@@ -22,7 +22,7 @@ namespace BossExpertise
 				herosMod.Call("AddPermission", "ToggleExpertMode", Language.GetTextValue("Mods.BossExpertise.ToggleModePermission"));
 				if(!Main.dedServ)
 				{
-					herosMod.Call("AddSimpleButton", "ToggleExpertMode", BossExpertise.Instance.GetTexture("ExpertModeButton"), (Action)OnButtonPressed, (Action<bool>)OnPermissionChanged, (Func<string>)GetButtonTooltip);
+					herosMod.Call("AddSimpleButton", "ToggleExpertMode", ModContent.GetInstance<BossExpertise>().GetTexture("ExpertModeButton"), (Action)OnButtonPressed, (Action<bool>)OnPermissionChanged, (Func<string>)GetButtonTooltip);
 				}
 			}
 		}
@@ -34,7 +34,7 @@ namespace BossExpertise
 		
 		public static void OnButtonPressed()
 		{
-			BossExpertise.Instance.SetExpertMode(!Main.expertMode);
+            ModContent.GetInstance<BossExpertise>().SetExpertMode(!Main.expertMode);
 		}
 		
 		public static void OnPermissionChanged(bool hasPermission)
