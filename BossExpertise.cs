@@ -16,20 +16,19 @@ namespace BossExpertise
 		
 		public override void Load()
 		{
-			Instance = this;
 
 			LegacyConfigV1.Load();
 			LegacyConfigV2.Load();
 
 			AddConfig("Config", new Config());
 			
-			if(Config.Instance.AddExpertCommand)
+			if(ModContent.GetInstance<Config>().AddExpertCommand)
 				AddCommand("expert", new ExpertCommand());
 		}
 		
 		public override void PostSetupContent()
 		{
-			if(Config.Instance.AddCheatSheetButton)
+			if(ModContent.GetInstance<Config>().AddCheatSheetButton)
 				CheatSheetIntegration.Load();
 		}
 		
@@ -44,7 +43,7 @@ namespace BossExpertise
 
 		public override void Unload()
 		{
-			Instance = null;
+
 		}
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)

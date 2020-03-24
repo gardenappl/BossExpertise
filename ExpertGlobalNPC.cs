@@ -24,11 +24,11 @@ namespace BossExpertise
 
 		bool ShouldModifyNPC(NPC npc)
 		{
-			if (!Config.Instance.ChangeBossAI)
+			if (!ModContent.GetInstance<Config>().ChangeBossAI)
 				return false;
-			if (Config.Instance.BossBlacklist.Contains(new NPCDefinition(npc.type)))
+			if (ModContent.GetInstance<Config>().BossBlacklist.Contains(new NPCDefinition(npc.type)))
 				return false;
-			else if (Config.Instance.BossWhitelist.Contains(new NPCDefinition(npc.type)))
+			else if (ModContent.GetInstance<Config>().BossWhitelist.Contains(new NPCDefinition(npc.type)))
 				return true;
 
 			return npc.boss;
@@ -36,7 +36,7 @@ namespace BossExpertise
 		
 		public override bool PreAI(NPC npc)
 		{
-			if (Config.Instance.ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
+			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
 				Main.expertMode = true;
 				FakeExpert = true;
@@ -55,7 +55,7 @@ namespace BossExpertise
 		
 		public override bool PreNPCLoot(NPC npc)
 		{
-			if(Config.Instance.DropTreasureBagsInNormal && ShouldModifyNPC(npc) && !Main.expertMode)
+			if(ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
 				Main.expertMode = true;
 				FakeExpert = true;
@@ -74,7 +74,7 @@ namespace BossExpertise
 		
 		public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
 		{
-			if(Config.Instance.ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
+			if(ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
 				Main.expertMode = true;
 				FakeExpert = true;

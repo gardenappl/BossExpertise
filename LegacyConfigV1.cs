@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader;
 
 namespace BossExpertise
 {
@@ -24,18 +25,18 @@ namespace BossExpertise
 				return;
 
 
-			BossExpertise.Instance.Logger.Warn("Found config file in old format! Reading config.txt...");
+            ModContent.GetInstance<BossExpertise>().Logger.Warn("Found config file in old format! Reading config.txt...");
 			bool success = ReadConfig();
 
 
 			if (success)
 			{
-				BossExpertise.Instance.Logger.Warn("Saving outdated config as JSON...");
+                ModContent.GetInstance<BossExpertise>().Logger.Warn("Saving outdated config as JSON...");
 				SaveAsJson();
 			}
 
 
-			BossExpertise.Instance.Logger.Warn("Deleting outdated config...");
+            ModContent.GetInstance<BossExpertise>().Logger.Warn("Deleting outdated config...");
 			try
 			{
 				File.Delete(ConfigPath);
@@ -46,12 +47,12 @@ namespace BossExpertise
 				}
 				else
 				{
-					BossExpertise.Instance.Logger.Warn("Outdated config folder still cotains some files/directories. They will not get deleted.");
+                    ModContent.GetInstance<BossExpertise>().Logger.Warn("Outdated config folder still cotains some files/directories. They will not get deleted.");
 				}
 			}
 			catch (Exception e)
 			{
-				BossExpertise.Instance.Logger.Error("Unable to delete old config!", e);
+                ModContent.GetInstance<BossExpertise>().Logger.Error("Unable to delete old config!", e);
 			}
 		}
 
@@ -61,7 +62,7 @@ namespace BossExpertise
 
 			if (File.Exists(ConfigPath))
 			{
-				BossExpertise.Instance.Logger.Warn("Found config file with old format! Reading outdated config...");
+                ModContent.GetInstance<BossExpertise>().Logger.Warn("Found config file with old format! Reading outdated config...");
 
 				using (var file = new StreamReader(ConfigPath))
 				{
@@ -83,7 +84,7 @@ namespace BossExpertise
 					}
 					catch (Exception e)
 					{
-						BossExpertise.Instance.Logger.Error("Unable to read old config file!", e);
+                        ModContent.GetInstance<BossExpertise>().Logger.Error("Unable to read old config file!", e);
 					}
 				}
 			}
