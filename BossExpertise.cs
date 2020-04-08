@@ -12,7 +12,6 @@ namespace BossExpertise
 {
 	public class BossExpertise : Mod
 	{
-		public static BossExpertise Instance;
 		
 		public override void Load()
 		{

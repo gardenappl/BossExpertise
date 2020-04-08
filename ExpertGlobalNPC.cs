@@ -24,8 +24,6 @@ namespace BossExpertise
 
 		bool ShouldModifyNPC(NPC npc)
 		{
-			if (!ModContent.GetInstance<Config>().ChangeBossAI)
-				return false;
 			if (ModContent.GetInstance<Config>().BossBlacklist.Contains(new NPCDefinition(npc.type)))
 				return false;
 			else if (ModContent.GetInstance<Config>().BossWhitelist.Contains(new NPCDefinition(npc.type)))
