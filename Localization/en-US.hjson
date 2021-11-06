@@ -1,0 +1,66 @@
+Mods: {
+	BossExpertise: {
+		ItemName: {
+			FakeDemonHeart: Fake Demon Heart
+		}
+
+		ItemTooltip: {
+			FakeDemonHeart:
+				'''
+				You're not supposed to have this item in your inventory!
+				Drop it on the ground to get a regular Demon Heart back.
+				'''
+		}
+
+		NowNormalMode: The world is now in Normal Mode.
+		NowExpertMode: The world is now in Expert Mode!
+		AlreadyNormalMode: The world is already in Normal Mode.
+		AlreadyExpertMode: The world is already in Expert Mode!
+		ToggleModePermission: Toggle Expert Mode
+		SwitchToNormal: Switch to Normal Mode
+		SwitchToExpert: Switch to Expert Mode
+		ExpertCommandUsage: Usage: /expert OR /expert <true|false>
+
+		Config: {
+			$parentVal: Settings
+			ServerBlocked: Only the server owner can change the settings.
+
+			AddCheatSheetButton: {
+				$parentVal: Add Cheat Sheet/HERO's Mod button
+				Desc: Add a button that toggles Expert Mode to the Cheat Sheet mod and HERO's Mod.
+			}
+
+			ChangeAI: {
+				$parentVal: Change Boss AI
+				Desc:
+					'''
+					Bring Expert Mode boss AI into Normal Mode.
+					(Warning: may break some modded bosses)
+					'''
+			}
+
+			DropBags: Treasure Bags in Normal Mode
+
+			ExpertCommand: {
+				$parentVal: Add /expert command
+				Desc: Add the /expert chat command that toggles Expert Mode.
+			}
+
+			DemonHeartHack: Demon Heart works in Normal Mode
+
+			BossBlacklist: {
+				$parentVal: Boss Blacklist
+				Desc: These bosses won't be affected by Boss Expertise.
+			}
+
+			BossWhitelist: {
+				$parentVal: Boss Whitelist
+				Desc:
+					'''
+					These NPCs will be affected by Boss Expertise
+					even if they're technically not bosses.
+					'''
+			}
+		}
+	}
+}

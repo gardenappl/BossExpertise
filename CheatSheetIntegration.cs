@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -11,18 +12,18 @@ namespace BossExpertise
 	{
 		public static void Load()
 		{
-			var cheatSheetMod = ModLoader.GetMod("CheatSheet");
+			ModLoader.TryGetMod("CheatSheet", out Mod cheatSheetMod);
 			if(cheatSheetMod != null && !Main.dedServ)
 			{
-				cheatSheetMod.Call("AddButton_Test", ModContent.GetInstance<BossExpertise>().GetTexture("ExpertModeButton"), (Action)OnButtonPressed, (Func<string>)GetButtonTooltip);
+				cheatSheetMod.Call("AddButton_Test", ModContent.Request<Texture2D>("BossExpertise/ExpertModeButton"), (Action)OnButtonPressed, (Func<string>)GetButtonTooltip);
 			}
-			var herosMod = ModLoader.GetMod("HEROsMod");
+			ModLoader.TryGetMod("HEROsMod", out Mod herosMod);
 			if(herosMod != null)
 			{
-				herosMod.Call("AddPermission", "ToggleExpertMode", Language.GetTextValue("Mods.BossExpertise.ToggleModePermission"));
+				herosMod.Call("AddPermission", "ToggleExpertModePermission", Language.GetTextValue("Mods.BossExpertise.ToggleModePermission"));
 				if(!Main.dedServ)
 				{
-					herosMod.Call("AddSimpleButton", "ToggleExpertMode", ModContent.GetInstance<BossExpertise>().GetTexture("ExpertModeButton"), (Action)OnButtonPressed, (Action<bool>)OnPermissionChanged, (Func<string>)GetButtonTooltip);
+					herosMod.Call("AddSimpleButton", "ToggleExpertMode", ModContent.Request<Texture2D>("BossExpertise/ExpertModeButton"), (Action)OnButtonPressed, (Action<bool>)OnPermissionChanged, (Func<string>)GetButtonTooltip);
 				}
 			}
 		}

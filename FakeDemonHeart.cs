@@ -11,11 +11,11 @@ namespace BossExpertise
 {
 	class FakeDemonHeart : ModItem
 	{
-		public override string Texture => "Terraria/Item_3335";
+		public override string Texture => "Terraria/Images/Item_" + ItemID.DemonHeart;
 
 		public override void SetDefaults()
 		{
-			item.CloneDefaults(ItemID.DemonHeart);
+			Item.CloneDefaults(ItemID.DemonHeart);
 		}
 
 		public override bool CanUseItem(Player player)
@@ -25,12 +25,12 @@ namespace BossExpertise
 			return base.CanUseItem(player);
 		}
 
-		public override bool UseItem(Player player)
+		public override bool? UseItem(Player player)
 		{
 			player.extraAccessory = true;
-			if (Main.netMode == 1 || Main.netMode == 2)
+			if (Main.netMode == NetmodeID.MultiplayerClient || Main.netMode == NetmodeID.Server)
 			{
-				var msg = mod.GetPacket();
+				var msg = Mod.GetPacket();
 				msg.Write((byte)ExpertMessageType.SyncDemonHeart);
 				msg.Write(player.whoAmI);
 				msg.Write(true);
@@ -49,9 +49,9 @@ namespace BossExpertise
 
 		void ConvertToRegularHeart()
 		{
-			int stack = item.stack;
-			item.SetDefaults(ItemID.DemonHeart);
-			item.stack = stack;
+			int stack = Item.stack;
+			Item.SetDefaults(ItemID.DemonHeart);
+			Item.stack = stack;
 		}
 	}
 }

@@ -11,15 +11,13 @@ namespace BossExpertise
 {
 	public class ExpertGlobalNPC : GlobalNPC
 	{
-		public static bool FakeExpert;
 		
 		public override void ResetEffects(NPC npc)
 		{
-			if (FakeExpert)
+			/*if (BossExpertise.FakeExpert == false)
 			{
-				Main.expertMode = false;
-				FakeExpert = false;
-			}
+				BossExpertise.HookExpertMode(false);
+			}*/
 		}
 
 		bool ShouldModifyNPC(NPC npc)
@@ -34,58 +32,43 @@ namespace BossExpertise
 		
 		public override bool PreAI(NPC npc)
 		{
-			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
-			{
-				Main.expertMode = true;
-				FakeExpert = true;
-			}
+			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
+				BossExpertise.HookExpertMode(true);
 			return base.PreAI(npc);
 		}
 		
 		public override void PostAI(NPC npc)
 		{
-			if (FakeExpert)
-			{
-				Main.expertMode = false;
-				FakeExpert = false;
-			}
+			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
+				BossExpertise.HookExpertMode(false);
 		}
 		
-		public override bool PreNPCLoot(NPC npc)
+		public override bool PreKill(NPC npc)
 		{
-			if(ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc) && !Main.expertMode)
-			{
-				Main.expertMode = true;
-				FakeExpert = true;
-			}
-			return base.PreNPCLoot(npc);
+			if(ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc))
+				BossExpertise.HookExpertMode(true);
+			return base.PreKill(npc);
 		}
 		
-		public override void NPCLoot(NPC npc)
+		public override void ModifyNPCLoot(NPC npc, NPCLoot nPCLoot)
 		{
-			if(FakeExpert)
-			{
-				Main.expertMode = false;
-				FakeExpert = false;
-			}
+			if (ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc) && !Main.expertMode)
+				BossExpertise.HookExpertMode(false);
 		}
 		
-		public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
+		public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			if(ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
-			{
-				Main.expertMode = true;
-				FakeExpert = true;
-			}
-			return base.PreDraw(npc, spriteBatch, drawColor);
+			if(ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
+				BossExpertise.HookExpertMode(true);
+
+			return base.PreDraw(npc, spriteBatch, screenPos, drawColor);
 		}
 		
-		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
+		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			if(FakeExpert)
+			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
-				Main.expertMode = false;
-				FakeExpert = false;
+				BossExpertise.HookExpertMode(false);
 			}
 		}
 	}
