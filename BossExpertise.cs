@@ -1,18 +1,16 @@
-﻿
-using System;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using System.IO;
+using System.Reflection;
 using Terraria;
 using Terraria.ID;
-using Terraria.IO;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace BossExpertise
 {
-	public class BossExpertise : Mod
+    public class BossExpertise : Mod
 	{
-		
+
+		public static bool? FakeExpert = false;
 		public override void Load()
 		{
 
@@ -20,9 +18,7 @@ namespace BossExpertise
 			LegacyConfigV2.Load();
 
 			AddConfig("Config", new Config());
-			
-			if(ModContent.GetInstance<Config>().AddExpertCommand)
-				AddCommand("expert", new ExpertCommand());
+
 		}
 		
 		public override void PostSetupContent()
@@ -30,19 +26,11 @@ namespace BossExpertise
 			if(ModContent.GetInstance<Config>().AddCheatSheetButton)
 				CheatSheetIntegration.Load();
 		}
-		
-		public override void PreSaveAndQuit()
-		{
-			if(ExpertGlobalNPC.FakeExpert) //an extra check just in case
-			{
-				Main.expertMode = false;
-				ExpertGlobalNPC.FakeExpert = false;
-			}
-		}
 
 		public override void Unload()
 		{
-
+			LegacyConfigV1.Unload();
+			LegacyConfigV2.Unload();
 		}
 
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
@@ -53,8 +41,8 @@ namespace BossExpertise
 			{
 				case ExpertMessageType.SyncExpert:
 					bool expert = reader.ReadBoolean();
-					Main.expertMode = expert;
-					if(Main.netMode == NetmodeID.Server)
+					HookExpertMode(expert);
+					if (Main.netMode == NetmodeID.Server)
 					{
 						SyncExpertMode(expert, whoAmI);
 					}
@@ -68,7 +56,7 @@ namespace BossExpertise
 		
 		void SyncExpertMode(bool expert, int ignoreClient = -1)
 		{
-			Main.expertMode = expert;
+			HookExpertMode(expert);
 			if(Main.netMode != NetmodeID.SinglePlayer)
 			{
 				var msg = GetPacket();
@@ -78,15 +66,25 @@ namespace BossExpertise
 			}
 		}
 		
+		public static void HookExpertMode(bool? givenValue)
+        {
+			FieldInfo expert = typeof(Main)
+				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
+				expert.SetValue(null, givenValue);
+		}
+
 		public void SetExpertMode(bool expert)
 		{
 			if(Main.expertMode && !expert)
 			{
+				FakeExpert = expert;
 				SyncExpertMode(false);
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowNormalMode"));
 			}
 			else if(!Main.expertMode && expert)
 			{
+				FakeExpert = expert;
+                Log(FakeExpert);
 				SyncExpertMode(true);
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowExpertMode"), 255, 50, 50);
 			}
@@ -98,6 +96,11 @@ namespace BossExpertise
 			{
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyExpertMode"), 255, 50, 50);
 			}
+		}
+
+		public static void Log(object message)
+		{
+			ModContent.GetInstance<BossExpertise>().Logger.Info(message);
 		}
 	}
 }

@@ -104,5 +104,11 @@ namespace BossExpertise
 			string json = JsonConvert.SerializeObject(configObject, ConfigManager.serializerSettings);
 			File.WriteAllText(Path.Combine(ConfigManager.ModConfigPath, "BossExpertise_Config.json"), json);
 		}
+		public static void Unload()
+		{
+			ConfigPath = null;
+			ConfigFolderPath = null;
+			ConfigVersionPath = null;
+		}
 	}
 }

@@ -1,0 +1,66 @@
+Mods: {
+	BossExpertise: {
+		ItemName: {
+			FakeDemonHeart: Фейковое сердце демона
+		}
+
+		ItemTooltip: {
+			FakeDemonHeart:
+				'''
+				Этот предмет не должен находиться у вас в инвентаре!
+				Выкиньте его, чтобы получить нормальное Сердце.
+				'''
+		}
+
+		NowNormalMode: Этот мир теперь в Нормальном режиме.
+		NowExpertMode: Этот мир теперь в Режиме эксперта!
+		AlreadyNormalMode: Этот мир уже в Нормальном режиме.
+		AlreadyExpertMode: Этот мир уже в Режиме эксперта!
+		ToggleModePermission: Включать/выключать Режим эксперта
+		SwitchToNormal: Перейти в Нормальный режим
+		SwitchToExpert: Перейти в Режим эксперта
+		ExpertCommandUsage: Использование: /expert или /expert <true|false>
+
+		Config: {
+			$parentVal: Настройки
+			ServerBlocked: Только владелец сервера может менять эти настройки.
+
+			AddCheatSheetButton: {
+				$parentVal: Добавить кнопку в Cheat Sheet/HERO's Mod
+				Desc: Добавить кнопку, переключающую Режим эксперта в Cheat Sheet и HERO's Mod.
+			}
+
+			ChangeAI: {
+				$parentVal: Менять ИИ боссов
+				Desc:
+					'''
+					Боссы в Нормальном режиме будут вести себя так же, как и в Режиме эксперта.
+					(Может не работать с некоторыми боссами из других модов)
+					'''
+			}
+
+			DropBags: Мешки сокровищ в Нормальном режиме
+
+			ExpertCommand: {
+				$parentVal: Команда /expert
+				Desc: Добавляет админ-команду /expert, переключающую Режим эксперта.
+			}
+
+			DemonHeartHack: Сердце демона работает в Нормальном режиме
+
+			BossBlacklist: {
+				$parentVal: Черный список боссов
+				Desc: Boss Expertise не будет влиять на этих боссов.
+			}
+
+			BossWhitelist: {
+				$parentVal: Белый список боссов
+				Desc:
+					'''
+					Boss Expertise будет влиять на этих НИПов,
+					даже если они технически не являются боссами.
+					'''
+			}
+		}
+	}
+}

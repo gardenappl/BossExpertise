@@ -9,13 +9,22 @@ namespace BossExpertise
 	{
 		public override void ResetEffects()
 		{
-			if(ExpertGlobalNPC.FakeExpert) //an extra check just in case
+			/*if(BossExpertise.FakeExpert == true) //an extra check just in case
 			{
-				Main.expertMode = false;
-				ExpertGlobalNPC.FakeExpert = false;
-			}
-			if(ModContent.GetInstance<Config>().DemonHeartWorksInNormal && player.extraAccessory && !(Main.expertMode || Main.gameMenu))
-				player.extraAccessorySlots++;
+				BossExpertise.HookExpertMode(false);
+			}*/
 		}
+        public override void UpdateEquips()
+        {
+			if (!Main.expertMode || !ModContent.GetInstance<Config>().DemonHeartWorksInNormal)
+				BossExpertise.HookExpertMode(true);
+		}
+
+		public override void PostUpdateEquips()
+		{
+			if (!Main.expertMode || !ModContent.GetInstance<Config>().DemonHeartWorksInNormal)
+				BossExpertise.HookExpertMode(false);
+		}
+
 	}
 }

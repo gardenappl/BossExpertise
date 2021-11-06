@@ -8,11 +8,6 @@ namespace BossExpertise
 {
 	public class ExpertCommand : ModCommand
 	{
-		public override bool Autoload(ref string name)
-		{
-			return false;
-		}
-		
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
 			if(args.Length == 0)
@@ -38,9 +33,10 @@ namespace BossExpertise
 			{
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.ExpertCommandUsage"));
 			}
+			
 		}
 
-		public override string Command
+        public override string Command
 		{
 			get { return "expert"; }
 		}
@@ -49,5 +45,12 @@ namespace BossExpertise
 		{
 			get { return CommandType.World; }
 		}
+
+		public void AddCommand()
+        {
+			Register();
+		}
+
+
 	}
 }
