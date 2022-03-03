@@ -6,32 +6,36 @@ using Terraria.ModLoader;
 
 namespace BossExpertise
 {
-	public class ExpertCommand : ModCommand
+	/*public class ExpertCommand : ModCommand
 	{
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
 			if(args.Length == 0)
 			{
-                ModContent.GetInstance<BossExpertise>().SetExpertMode(!Main.expertMode);
+                ModContent.GetInstance<BossExpertise>().SetDifficultyMode(BossExpertise.CurrentDifficulty + 1);
 			}
 			else if(args.Length == 1)
 			{
-				if(args[0].Equals("true", StringComparison.OrdinalIgnoreCase))
+				if (args[0].Equals("2", StringComparison.OrdinalIgnoreCase))
 				{
-                    ModContent.GetInstance<BossExpertise>().SetExpertMode(true);
+					ModContent.GetInstance<BossExpertise>().SetDifficultyMode(2);
 				}
-				else if(args[0].Equals("false", StringComparison.OrdinalIgnoreCase))
+				if (args[0].Equals("1", StringComparison.OrdinalIgnoreCase))
 				{
-                    ModContent.GetInstance<BossExpertise>().SetExpertMode(false);
+                    ModContent.GetInstance<BossExpertise>().SetDifficultyMode(1);
+				}
+				else if(args[0].Equals("0", StringComparison.OrdinalIgnoreCase))
+				{
+                    ModContent.GetInstance<BossExpertise>().SetDifficultyMode(0);
 				}
 				else
 				{
-					Main.NewText(Language.GetTextValue("Mods.BossExpertise.ExpertCommandUsage"));
+					Main.NewText(Language.GetTextValue("Mods.BossExpertise.DifficultyCommandUsage"));
 				}
 			}
 			else
 			{
-				Main.NewText(Language.GetTextValue("Mods.BossExpertise.ExpertCommandUsage"));
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.DifficultyCommandUsage"));
 			}
 			
 		}
@@ -52,5 +56,5 @@ namespace BossExpertise
 		}
 
 
-	}
+	}*/
 }

@@ -11,14 +11,6 @@ namespace BossExpertise
 {
 	public class ExpertGlobalNPC : GlobalNPC
 	{
-		
-		public override void ResetEffects(NPC npc)
-		{
-			/*if (BossExpertise.FakeExpert == false)
-			{
-				BossExpertise.HookExpertMode(false);
-			}*/
-		}
 
 		bool ShouldModifyNPC(NPC npc)
 		{
@@ -33,42 +25,42 @@ namespace BossExpertise
 		public override bool PreAI(NPC npc)
 		{
 			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
-				BossExpertise.HookExpertMode(true);
-			return base.PreAI(npc);
+				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
+			return true;
 		}
 		
 		public override void PostAI(NPC npc)
 		{
-			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
-				BossExpertise.HookExpertMode(false);
+			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
+				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
 		}
 		
 		public override bool PreKill(NPC npc)
 		{
 			if(ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc))
-				BossExpertise.HookExpertMode(true);
-			return base.PreKill(npc);
+				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
+			return true;
 		}
-		
-		public override void ModifyNPCLoot(NPC npc, NPCLoot nPCLoot)
-		{
-			if (ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc) && !Main.expertMode)
-				BossExpertise.HookExpertMode(false);
+
+        public override void OnKill(NPC npc)
+        {
+			if (ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc))
+				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
 		}
 		
 		public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
 			if(ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
-				BossExpertise.HookExpertMode(true);
+				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
 
-			return base.PreDraw(npc, spriteBatch, screenPos, drawColor);
+			return true;
 		}
 		
 		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
 			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
-				BossExpertise.HookExpertMode(false);
+				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
 			}
 		}
 	}

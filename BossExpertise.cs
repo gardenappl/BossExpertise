@@ -10,22 +10,32 @@ namespace BossExpertise
     public class BossExpertise : Mod
 	{
 
-		public static bool? FakeExpert = false;
+		public static int CurrentDifficulty = 0;
 		public override void Load()
 		{
 
 			LegacyConfigV1.Load();
 			LegacyConfigV2.Load();
-
 			AddConfig("Config", new Config());
-
+			if (ModContent.GetInstance<Config>().CurrentFakedDifficulty == "Expert")
+			{
+				CurrentDifficulty = 1;
+			}
+			else if (ModContent.GetInstance<Config>().CurrentFakedDifficulty == "Master")
+			{
+				CurrentDifficulty = 2;
+			}
+			else
+			{
+				CurrentDifficulty = 0;
+			}
 		}
 		
-		public override void PostSetupContent()
+		/*public override void PostSetupContent()
 		{
 			if(ModContent.GetInstance<Config>().AddCheatSheetButton)
 				CheatSheetIntegration.Load();
-		}
+		}*/
 
 		public override void Unload()
 		{
@@ -39,12 +49,12 @@ namespace BossExpertise
 //			Log("Received message! Type: {0}, Net mode: {1}", msgType, Main.netMode);
 			switch(msgType)
 			{
-				case ExpertMessageType.SyncExpert:
-					bool expert = reader.ReadBoolean();
-					HookExpertMode(expert);
+				case ExpertMessageType.SyncDifficulty:
+					int difficulty = reader.ReadInt32();
+					HookDifficultyMode(difficulty);
 					if (Main.netMode == NetmodeID.Server)
 					{
-						SyncExpertMode(expert, whoAmI);
+						SyncDifficultyMode(difficulty, whoAmI);
 					}
 					return;
 				case ExpertMessageType.SyncDemonHeart:
@@ -54,48 +64,83 @@ namespace BossExpertise
 			}
 		}
 		
-		void SyncExpertMode(bool expert, int ignoreClient = -1)
-		{
-			HookExpertMode(expert);
-			if(Main.netMode != NetmodeID.SinglePlayer)
+		void SyncDifficultyMode(int difficulty, int ignoreClient = -1)
+		{ 
+			HookDifficultyMode(difficulty);
+			if (Main.netMode != NetmodeID.SinglePlayer)
 			{
 				var msg = GetPacket();
-				msg.Write((byte)ExpertMessageType.SyncExpert);
-				msg.Write(expert);
+				msg.Write((byte)ExpertMessageType.SyncDifficulty);
+				msg.Write(difficulty);
 				msg.Send(ignoreClient: ignoreClient);
 			}
 		}
 		
-		public static void HookExpertMode(bool? givenValue)
+		public static void HookDifficultyMode(int difficulty)
         {
-			FieldInfo expert = typeof(Main)
+			if (difficulty == 0 || difficulty > 2)
+            {
+				FieldInfo expert = typeof(Main)
 				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
-				expert.SetValue(null, givenValue);
+				expert.SetValue(null, false);
+				FieldInfo master = typeof(Main)
+				.GetField("_overrideForMasterMode", BindingFlags.Static | BindingFlags.NonPublic);
+				master.SetValue(null, false);
+			}
+			else if (difficulty == 1)
+			{
+				FieldInfo expert = typeof(Main)
+				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
+				expert.SetValue(null, true);
+			}
+			else if (difficulty == 2)
+			{
+				FieldInfo expert = typeof(Main)
+				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
+				expert.SetValue(null, true);
+				FieldInfo master = typeof(Main)
+				.GetField("_overrideForMasterMode", BindingFlags.Static | BindingFlags.NonPublic);
+				master.SetValue(null, true);
+			}
 		}
 
-		public void SetExpertMode(bool expert)
+		public void SetDifficultyMode(int difficulty)
 		{
-			if(Main.expertMode && !expert)
+			if (difficulty > 2)
 			{
-				FakeExpert = expert;
-				SyncExpertMode(false);
+				difficulty = 0;
+			}
+			if (Main.expertMode && difficulty == 0)
+			{
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowNormalMode"));
 			}
-			else if(!Main.expertMode && expert)
+			else if (!Main.expertMode && difficulty == 1)
 			{
-				FakeExpert = expert;
-                Log(FakeExpert);
-				SyncExpertMode(true);
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowExpertMode"), 255, 50, 50);
 			}
-			else if(!Main.expertMode && !expert)
+			else if (!Main.masterMode && difficulty == 2)
+			{
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowMasterMode"), 255, 50, 50);
+			}
+			else if (!Main.expertMode && difficulty == 0)
 			{
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyNormalMode"));
 			}
-			else
+			else if (Main.expertMode && difficulty == 1)
 			{
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyExpertMode"), 255, 50, 50);
 			}
+			else if (!Main.masterMode && difficulty == 2)
+			{
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyMasterMode"), 255, 50, 50);
+			}
+			else
+			{
+				Log("Something went wrong in BossExpertise: " + CurrentDifficulty);
+				return;
+			}
+			SyncDifficultyMode(difficulty);
+			CurrentDifficulty = difficulty;
 		}
 
 		public static void Log(object message)

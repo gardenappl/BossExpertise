@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.ID;
@@ -27,15 +28,23 @@ namespace BossExpertise
 			return false;
 		}
 
+		[Label("$Mods.BossExpertise.Config.CurrentFakedDifficulty")]
+		[Tooltip("$Mods.BossExpertise.Config.CurrentFakedDifficulty.Desc")]
+		[ReloadRequired]
+		[DrawTicks]
+		[OptionStrings(new string[] { "Expert", "Master"})]
+		[DefaultValue("Expert")]
+		public string CurrentFakedDifficulty;
+
 		[Label("$Mods.BossExpertise.Config.DropBags")]
 		[DefaultValue(false)]
 		public bool DropTreasureBagsInNormal;
 
-		[Label("$Mods.BossExpertise.Config.AddCheatSheetButton")]
+		/*[Label("$Mods.BossExpertise.Config.AddCheatSheetButton")]
 		[Tooltip("$Mods.BossExpertise.Config.AddCheatSheetButton.Desc")]
 		[ReloadRequired]
 		[DefaultValue(true)]
-		public bool AddCheatSheetButton;
+		public bool AddCheatSheetButton;*/
 
 		[Label("$Mods.BossExpertise.Config.ChangeAI")]
 		[Tooltip("$Mods.BossExpertise.Config.ChangeAI.Desc")]
@@ -53,13 +62,23 @@ namespace BossExpertise
 					new NPCDefinition(NPCID.DD2Betsy)
 				};
 
-		[Label("$Mods.BossExpertise.Config.ExpertCommand")]
+		/*[Label("$Mods.BossExpertise.Config.ExpertCommand")]
 		[Tooltip("$Mods.BossExpertise.Config.ExpertCommand.Desc")]
 		[ReloadRequired]
 		[DefaultValue(true)]
-		public bool AddExpertCommand;
+		public bool AddExpertCommand;*/
 
-		[Label("$Mods.BossExpertise.Config.DemonHeartHack")]
-		public bool DemonHeartWorksInNormal;
+		[Label("$Mods.BossExpertise.Config.SlotsHack")]
+		[Tooltip("$Mods.BossExpertise.Config.SlotsHack.Desc")]
+		public bool SlotsWorksInNormal;
+
+		[OnDeserialized]
+		internal void OnDeserializedMethod(StreamingContext context)
+		{
+			// RangeAttribute is just a suggestion to the UI. If we want to enforce constraints, we need to validate the data here. Users can edit config files manually with values outside the RangeAttribute, so we fix here if necessary.
+			// Both enforcing ranges and not enforcing ranges have uses in mods. Make sure you fix config values if values outside the range will mess up your mod.
+			if (CurrentFakedDifficulty != "Expert" && CurrentFakedDifficulty != "Master")
+				CurrentFakedDifficulty = "Expert";
+		}
 	}
 }

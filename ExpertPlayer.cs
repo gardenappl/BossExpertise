@@ -7,23 +7,59 @@ namespace BossExpertise
 {
 	public class ExpertPlayer : ModPlayer
 	{
-		public override void ResetEffects()
-		{
-			/*if(BossExpertise.FakeExpert == true) //an extra check just in case
-			{
-				BossExpertise.HookExpertMode(false);
-			}*/
-		}
-        public override void UpdateEquips()
+        public override void Load()
         {
-			if (!Main.expertMode || !ModContent.GetInstance<Config>().DemonHeartWorksInNormal)
-				BossExpertise.HookExpertMode(true);
+          On.Terraria.Player.IsAValidEquipmentSlotForIteration += HookIsAValidEquipmentSlotForIteration;
+        }
+
+		public override void Unload()
+		{
+			On.Terraria.Player.IsAValidEquipmentSlotForIteration -= HookIsAValidEquipmentSlotForIteration;
 		}
 
-		public override void PostUpdateEquips()
+		private static bool HookIsAValidEquipmentSlotForIteration(On.Terraria.Player.orig_IsAValidEquipmentSlotForIteration orig, Player self, int slot)
 		{
-			if (!Main.expertMode || !ModContent.GetInstance<Config>().DemonHeartWorksInNormal)
-				BossExpertise.HookExpertMode(false);
+			if (slot < 10)
+			{
+				if (slot == 8)
+				{
+					goto DemonHeartSlot;
+				}
+				if (slot == 9)
+				{
+					goto MasterModeSlot;
+				}
+			}
+			else
+			{
+				if (slot == 18)
+				{
+					goto DemonHeartSlot;
+				}
+				if (slot == 19)
+				{
+					goto MasterModeSlot;
+				}
+			}
+			return true;
+		DemonHeartSlot:
+			bool result = self.extraAccessory;
+			bool cantUseExpertModeSlot = (!Main.expertMode && !(BossExpertise.CurrentDifficulty > 0 && ModContent.GetInstance<Config>().SlotsWorksInNormal)) && !Main.gameMenu;
+			if (cantUseExpertModeSlot)
+			{
+				result = false;
+			}
+			return result;
+		MasterModeSlot:
+			result = true;
+			bool cantUseMasterModeSlot = (!Main.masterMode && !(BossExpertise.CurrentDifficulty > 1 && ModContent.GetInstance<Config>().SlotsWorksInNormal)) && !Main.gameMenu;
+			if (cantUseMasterModeSlot)
+			{
+				result = false;
+			}
+			return result;
+
+			orig(self, slot);
 		}
 
 	}
