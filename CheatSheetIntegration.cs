@@ -30,12 +30,23 @@ namespace BossExpertise
 		
 		public static string GetButtonTooltip()
 		{
-			return Language.GetTextValue(Main.expertMode ? "Mods.BossExpertise.SwitchToNormal" : "Mods.BossExpertise.SwitchToExpert");
+			switch(BossExpertise.CurrentDifficulty)
+            {
+				case 0:
+					return Language.GetTextValue("Mods.BossExpertise.SwitchToExpert");
+				case 1:
+					return Language.GetTextValue("Mods.BossExpertise.SwitchToMaster");
+				case 2:
+					return Language.GetTextValue("Mods.BossExpertise.SwitchToNormal");
+				default:
+					return Language.GetTextValue("Mods.BossExpertise.SwitchToNormal");
+			}
+			
 		}
 		
 		public static void OnButtonPressed()
 		{
-            ModContent.GetInstance<BossExpertise>().SetExpertMode(!Main.expertMode);
+			ModContent.GetInstance<BossExpertise>().SetDifficultyMode(BossExpertise.CurrentDifficulty + 1);
 		}
 		
 		public static void OnPermissionChanged(bool hasPermission)

@@ -14,12 +14,16 @@ Mods: {
 
 		NowNormalMode: The world is now in Normal Mode.
 		NowExpertMode: The world is now in Expert Mode!
+		NowMasterMode: The world is now in Master Mode!
 		AlreadyNormalMode: The world is already in Normal Mode.
 		AlreadyExpertMode: The world is already in Expert Mode!
-		ToggleModePermission: Toggle Expert Mode
+		AlreadyMasterMode: The world is already in Master Mode!
+		ToggleModePermission: Toggle Difficulty Mode
 		SwitchToNormal: Switch to Normal Mode
 		SwitchToExpert: Switch to Expert Mode
-		ExpertCommandUsage: Usage: /expert OR /expert <true|false>
+		SwitchToMaster: Switch to Master Mode
+		DifficultyCommandUsage: Usage: /Difficulty <0(Normal)|1(Expert)|2(Master)>
+
 
 		Config: {
 			$parentVal: Settings
@@ -27,7 +31,7 @@ Mods: {
 
 			AddCheatSheetButton: {
 				$parentVal: Add Cheat Sheet/HERO's Mod button
-				Desc: Add a button that toggles Expert Mode to the Cheat Sheet mod and HERO's Mod.
+				Desc: Add a button that toggles difficulty mode to the Cheat Sheet mod and HERO's Mod.
 			}
 
 			ChangeAI: {
@@ -42,11 +46,19 @@ Mods: {
 			DropBags: Treasure Bags in Normal Mode
 
 			ExpertCommand: {
-				$parentVal: Add /expert command
-				Desc: Add the /expert chat command that toggles Expert Mode.
+				$parentVal: Add /difficulty command
+				Desc: Add the /difficulty chat command that toggles Expert Mode.
 			}
 
-			DemonHeartHack: Demon Heart works in Normal Mode
+			CurrentFakedDifficulty: {
+				$parentVal: Current Faked Difficulty
+				Desc: Makes the world think it is set to this difficulty.
+			}
+
+			SlotsHack: {
+				$parentVal: Accessory Slots
+				Desc: The extra accessory slot(s) work in Normal Mode.
+			}
 
 			BossBlacklist: {
 				$parentVal: Boss Blacklist

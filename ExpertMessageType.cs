@@ -5,7 +5,7 @@ namespace BossExpertise
 {
 	public enum ExpertMessageType : byte
 	{
-		SyncExpert,
+		SyncDifficulty,
 		SyncDemonHeart
 	}
 }

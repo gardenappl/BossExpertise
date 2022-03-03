@@ -20,7 +20,7 @@ namespace BossExpertise
 
 		public override bool CanUseItem(Player player)
 		{
-			if (!Main.expertMode || player.extraAccessory || !ModContent.GetInstance<Config>().DemonHeartWorksInNormal)
+			if (player.extraAccessory || !ModContent.GetInstance<Config>().SlotsWorksInNormal)
 				return false;
 			return base.CanUseItem(player);
 		}

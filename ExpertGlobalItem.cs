@@ -13,8 +13,7 @@ namespace BossExpertise
 	{
 		public override bool CanUseItem(Item item, Player player)
 		{
-			if (item.type == ItemID.DemonHeart && !player.extraAccessory &&
-					!Main.expertMode && ModContent.GetInstance<Config>().DemonHeartWorksInNormal)
+			if (item.type == ItemID.DemonHeart && !player.extraAccessory && ModContent.GetInstance<Config>().SlotsWorksInNormal)
 			{
 				int stack = item.stack;
 				item.SetDefaults(ModContent.ItemType<FakeDemonHeart>());
