@@ -9,7 +9,7 @@ namespace BossExpertise
 {
     public class BossExpertise : Mod
 	{
-
+		public static int ActualDifficulty = 0;
 		public static int CurrentDifficulty = 0;
 		public override void Load()
 		{
@@ -92,6 +92,10 @@ namespace BossExpertise
 				FieldInfo expert = typeof(Main)
 				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
 				expert.SetValue(null, true);
+				FieldInfo master = typeof(Main)
+				.GetField("_overrideForMasterMode", BindingFlags.Static | BindingFlags.NonPublic);
+				master.SetValue(null, false);
+
 			}
 			else if (difficulty == 2)
 			{
