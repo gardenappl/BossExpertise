@@ -32,7 +32,7 @@ namespace BossExpertise
 		public override void PostAI(NPC npc)
 		{
 			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
-				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
+				BossExpertise.HookDifficultyMode(BossExpertise.ActualDifficulty);
 		}
 		
 		public override bool PreKill(NPC npc)
@@ -45,7 +45,7 @@ namespace BossExpertise
         public override void OnKill(NPC npc)
         {
 			if (ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc))
-				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
+				BossExpertise.HookDifficultyMode(BossExpertise.ActualDifficulty);
 		}
 		
 		public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -60,7 +60,7 @@ namespace BossExpertise
 		{
 			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
 			{
-				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
+				BossExpertise.HookDifficultyMode(BossExpertise.ActualDifficulty);
 			}
 		}
 	}

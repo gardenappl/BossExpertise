@@ -51,6 +51,10 @@ namespace BossExpertise
 		[DefaultValue(true)]
 		public bool ChangeBossAI;
 
+		[Label("$Mods.BossExpertise.Config.SlotsHack")]
+		[Tooltip("$Mods.BossExpertise.Config.SlotsHack.Desc")]
+		public bool SlotsWorksInNormal;
+
 		[Label("$Mods.BossExpertise.Config.BossBlacklist")]
 		[Tooltip("$Mods.BossExpertise.Config.BossBlacklist.Desc")]
 		public List<NPCDefinition> BossBlacklist = new List<NPCDefinition>();
@@ -67,10 +71,6 @@ namespace BossExpertise
 		[ReloadRequired]
 		[DefaultValue(true)]
 		public bool AddExpertCommand;*/
-
-		[Label("$Mods.BossExpertise.Config.SlotsHack")]
-		[Tooltip("$Mods.BossExpertise.Config.SlotsHack.Desc")]
-		public bool SlotsWorksInNormal;
 
 		[OnDeserialized]
 		internal void OnDeserializedMethod(StreamingContext context)
