@@ -32,10 +32,9 @@ namespace BossExpertise
 
 		public override void PreSaveAndQuit()
 		{
-			if (BossExpertise.CurrentDifficulty > 0) //an extra check just in case
+			if (BossExpertise.CurrentDifficulty != BossExpertise.ActualDifficulty) //an extra check just in case
 			{
-				BossExpertise.ActualDifficulty = 0;
-				BossExpertise.HookDifficultyMode(0);
+				BossExpertise.HookDifficultyMode(BossExpertise.ActualDifficulty);
 			}
 		}
 	}
