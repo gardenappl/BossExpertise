@@ -144,7 +144,7 @@ namespace BossExpertise
 				return;
 			}
 			SyncDifficultyMode(difficulty);
-			CurrentDifficulty = difficulty;
+			ActualDifficulty = difficulty;
 		}
 
 		public static void Log(object message)
