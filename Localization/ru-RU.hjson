@@ -6,17 +6,17 @@ Mods: {
 			You're not supposed to have this item in your inventory!
 			Drop it on the ground to get a regular Demon Heart back.
 			''' */
-		NowNormalMode: Этот мир теперь в Нормальном режиме.
-		NowExpertMode: Этот мир теперь в Режиме эксперта!
-		// NowMasterMode: The world is now in Master Mode!
-		AlreadyNormalMode: Этот мир уже в Нормальном режиме.
-		AlreadyExpertMode: Этот мир уже в Режиме эксперта!
-		// AlreadyMasterMode: The world is already in Master Mode!
-		ToggleModePermission: Включать/выключать Режим эксперта
-		SwitchToNormal: Перейти в Нормальный режим
-		SwitchToExpert: Перейти в Режим эксперта
-		// SwitchToMaster: Switch to Master Mode
-		// DifficultyCommandUsage: Usage: /difficulty <0(Normal)|1(Expert)|2(Master)>
+		NowNormalMode: Этот мир теперь в классическом режиме.
+		NowExpertMode: Этот мир теперь в режиме эксперта!
+		NowMasterMode: The world is now in режиме мастера!
+		AlreadyNormalMode: Этот мир уже в классическом режиме.
+		AlreadyExpertMode: Этот мир уже в режиме эксперта!
+		AlreadyMasterMode: Этот мир уже в режиме мастера!
+		ToggleModePermission: Включать/выключать режим эксперта
+		SwitchToNormal: Перейти в классический режим
+		SwitchToExpert: Перейти в режим эксперта
+		SwitchToMaster: Перейти в режим мастера
+		DifficultyCommandUsage: Использование: /difficulty <0 (классический)|1 (эксперт)|2 (мастер)>
 
 		Items: {
 			FakeDemonHeart: {
@@ -35,13 +35,13 @@ Mods: {
 				ServerBlocked: Только владелец сервера может менять эти настройки.
 
 				CurrentFakedDifficulty: {
-					Label: Current Faked Difficulty
-					Tooltip: Makes the enabled settings think it is set to this difficulty.
+					Label: Фейковая сложность
+					Tooltip: Геймплейные фичи, опасные для игрока (например, поведение боссов) будут вести себя как на этой сложности.
 				}
 
 				DropTreasureBagsInNormal: {
-					// Label: Modify loot
-					// Tooltip: Changes loot in accordence with your selected Beneficial Difficulty.
+					Label: Менять лут
+					Tooltip: Меняет дропы из боссов в зависимости от "полезной фейковой сложности".
 				}
 
 				AddCheatSheetButton: {
@@ -50,17 +50,17 @@ Mods: {
 				}
 
 				ChangeBossAI: {
-					Label: Change Boss AI
+					Label: Менять ИИ боссов
 					Tooltip:
 						'''
-						Bring Expert Mode boss AI into Normal Mode.
-						(Warning: may break some modded bosses)
+						Изменить поведение боссов в зависимости от выбраной "фейковой сложности.
+						(Может не работать с боссами из других модов.)
 						'''
 				}
 
 				SlotsWorksInNormal: {
-					// Label: Accessory Slots
-					// Tooltip: The extra accessory slot(s) work based on the current beneficial difficulty.
+					Label: Слоты аксессуаров
+					Tooltip: Дополнительные слоты аксессуаров изменяться в зависимости от "полезной фейковой сложности".
 				}
 
 				BossBlacklist: {
@@ -69,17 +69,17 @@ Mods: {
 				}
 
 				BossWhitelist: {
-					// Label: Boss Whitelist
-					/* Tooltip:
+					Label: Белый список боссов
+					Tooltip:
 						'''
-						These NPCs will be affected by Boss Expertise
-						even if they're technically not bosses.
-						''' */
+						Boss Expertise будет влиять на этих врагов так, будто они боссы
+						(даже если технически не являються боссами)
+						'''
 				}
 
 				FakedBeneficialDifficulty: {
-					// Label: Faked Beneficial Difficulty
-					// Tooltip: ""
+					Label: Полезная фейковая сложность
+					Tooltip: Геймплейные фичи, полезные для игрока (например, лут из боссов) будут вести себя как на этой сложности.
 				}
 
 				ForTheWorthy: {
@@ -88,17 +88,17 @@ Mods: {
 				}
 
 				ChangeNPCAI: {
-					Label: Change NPC AI
+					Label: Менять ИИ врагов
 					Tooltip:
 						'''
-						Bring Expert Mode NPC AI into Normal Mode.
-						(Warning: may break some modded NPCs)
+						Изменить поведение врагов (за исключением боссов) в зависимости от выбраной "фейковой сложности.
+						(Может не работать с врагами из других модов.)
 						'''
 				}
 
 				AddExpertCommand: {
 					Label: Команда /difficulty
-					Tooltip: Добавляет админ-команду /difficulty, переключающую Режим эксперта.
+					Tooltip: Добавляет админ-команду /difficulty, переключающую сложность мира.
 				}
 			}
 		}
