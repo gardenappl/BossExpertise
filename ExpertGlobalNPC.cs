@@ -12,56 +12,56 @@ namespace BossExpertise
 	public class ExpertGlobalNPC : GlobalNPC
 	{
 
-		bool ShouldModifyNPC(NPC npc)
+		public static bool ShouldModifyNPC(NPC npc)
 		{
-			if (ModContent.GetInstance<Config>().BossBlacklist.Contains(new NPCDefinition(npc.type)))
+			Config config = ModContent.GetInstance<Config>();
+			if (config.BossBlacklist.Contains(new NPCDefinition(npc.type)))
 				return false;
-			else if (ModContent.GetInstance<Config>().BossWhitelist.Contains(new NPCDefinition(npc.type)))
+			else if (config.BossWhitelist.Contains(new NPCDefinition(npc.type)))
 				return true;
 
-			return npc.boss;
+			return (config.ChangeBossAI && npc.boss) || (!npc.boss && config.ChangeNPCAI);
 		}
 		
 		public override bool PreAI(NPC npc)
 		{
-			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
-				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
+			if (ShouldModifyNPC(npc))
+				BossExpertise.HookDifficultyMode(BossExpertise.FakedDifficulty);
 			return true;
 		}
 		
 		public override void PostAI(NPC npc)
 		{
-			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
-				BossExpertise.HookDifficultyMode(BossExpertise.ActualDifficulty);
+			if (ShouldModifyNPC(npc))
+				BossExpertise.HookDifficultyMode(BossExpertiseSystem.worldDifficulty);
 		}
 		
 		public override bool PreKill(NPC npc)
 		{
 			if(ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc))
-				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
+				BossExpertise.HookDifficultyMode(BossExpertise.FakedBeneficialDifficulty);
+
 			return true;
 		}
 
         public override void OnKill(NPC npc)
         {
 			if (ModContent.GetInstance<Config>().DropTreasureBagsInNormal && ShouldModifyNPC(npc))
-				BossExpertise.HookDifficultyMode(BossExpertise.ActualDifficulty);
+				BossExpertise.HookDifficultyMode(BossExpertiseSystem.worldDifficulty);
 		}
 		
 		public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			if(ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc))
-				BossExpertise.HookDifficultyMode(BossExpertise.CurrentDifficulty);
-
+			if (ShouldModifyNPC(npc))
+				BossExpertise.HookDifficultyMode(BossExpertise.FakedDifficulty);
+			
 			return true;
 		}
 		
 		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			if (ModContent.GetInstance<Config>().ChangeBossAI && ShouldModifyNPC(npc) && !Main.expertMode)
-			{
-				BossExpertise.HookDifficultyMode(BossExpertise.ActualDifficulty);
-			}
+			if (!Main.expertMode && ShouldModifyNPC(npc))
+				BossExpertise.HookDifficultyMode(BossExpertiseSystem.worldDifficulty);
 		}
 	}
 }

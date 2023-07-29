@@ -1,65 +1,105 @@
 Mods: {
 	BossExpertise: {
-		ItemName: {
-			FakeDemonHeart: Фейковое сердце демона
-		}
-
-		ItemTooltip: {
-			FakeDemonHeart:
-				'''
-				Этот предмет не должен находиться у вас в инвентаре!
-				Выкиньте его, чтобы получить нормальное Сердце.
-				'''
-		}
-
+		// ItemName.FakeDemonHeart: Fake Demon Heart
+		/* ItemTooltip.FakeDemonHeart:
+			'''
+			You're not supposed to have this item in your inventory!
+			Drop it on the ground to get a regular Demon Heart back.
+			''' */
 		NowNormalMode: Этот мир теперь в Нормальном режиме.
 		NowExpertMode: Этот мир теперь в Режиме эксперта!
+		// NowMasterMode: The world is now in Master Mode!
 		AlreadyNormalMode: Этот мир уже в Нормальном режиме.
 		AlreadyExpertMode: Этот мир уже в Режиме эксперта!
+		// AlreadyMasterMode: The world is already in Master Mode!
 		ToggleModePermission: Включать/выключать Режим эксперта
 		SwitchToNormal: Перейти в Нормальный режим
 		SwitchToExpert: Перейти в Режим эксперта
-		ExpertCommandUsage: Использование: /expert или /expert <true|false>
+		// SwitchToMaster: Switch to Master Mode
+		// DifficultyCommandUsage: Usage: /difficulty <0(Normal)|1(Expert)|2(Master)>
 
-		Config: {
-			$parentVal: Настройки
-			ServerBlocked: Только владелец сервера может менять эти настройки.
-
-			AddCheatSheetButton: {
-				$parentVal: Добавить кнопку в Cheat Sheet/HERO's Mod
-				Desc: Добавить кнопку, переключающую Режим эксперта в Cheat Sheet и HERO's Mod.
-			}
-
-			ChangeAI: {
-				$parentVal: Менять ИИ боссов
-				Desc:
+		Items: {
+			FakeDemonHeart: {
+				DisplayName: Фейковое сердце демона
+				Tooltip:
 					'''
-					Боссы в Нормальном режиме будут вести себя так же, как и в Режиме эксперта.
-					(Может не работать с некоторыми боссами из других модов)
+					Этот предмет не должен находиться у вас в инвентаре!
+					Выкиньте его, чтобы получить нормальное Сердце.
 					'''
 			}
+		}
 
-			DropBags: Мешки сокровищ в Нормальном режиме
+		Configs: {
+			Config: {
+				DisplayName: Настройки
+				ServerBlocked: Только владелец сервера может менять эти настройки.
 
-			ExpertCommand: {
-				$parentVal: Команда /expert
-				Desc: Добавляет админ-команду /expert, переключающую Режим эксперта.
-			}
+				CurrentFakedDifficulty: {
+					Label: Current Faked Difficulty
+					Tooltip: Makes the enabled settings think it is set to this difficulty.
+				}
 
-			DemonHeartHack: Сердце демона работает в Нормальном режиме
+				DropTreasureBagsInNormal: {
+					// Label: Modify loot
+					// Tooltip: Changes loot in accordence with your selected Beneficial Difficulty.
+				}
 
-			BossBlacklist: {
-				$parentVal: Черный список боссов
-				Desc: Boss Expertise не будет влиять на этих боссов.
-			}
+				AddCheatSheetButton: {
+					Label: Добавить кнопку в Cheat Sheet/HERO's Mod
+					Tooltip: Добавить кнопку, переключающую Режим эксперта в Cheat Sheet и HERO's Mod.
+				}
 
-			BossWhitelist: {
-				$parentVal: Белый список боссов
-				Desc:
-					'''
-					Boss Expertise будет влиять на этих НИПов,
-					даже если они технически не являются боссами.
-					'''
+				ChangeBossAI: {
+					Label: Change Boss AI
+					Tooltip:
+						'''
+						Bring Expert Mode boss AI into Normal Mode.
+						(Warning: may break some modded bosses)
+						'''
+				}
+
+				SlotsWorksInNormal: {
+					// Label: Accessory Slots
+					// Tooltip: The extra accessory slot(s) work based on the current beneficial difficulty.
+				}
+
+				BossBlacklist: {
+					Label: Черный список боссов
+					Tooltip: Boss Expertise не будет влиять на этих боссов.
+				}
+
+				BossWhitelist: {
+					// Label: Boss Whitelist
+					/* Tooltip:
+						'''
+						These NPCs will be affected by Boss Expertise
+						even if they're technically not bosses.
+						''' */
+				}
+
+				FakedBeneficialDifficulty: {
+					// Label: Faked Beneficial Difficulty
+					// Tooltip: ""
+				}
+
+				ForTheWorthy: {
+					// Label: For The Worthy
+					// Tooltip: ""
+				}
+
+				ChangeNPCAI: {
+					Label: Change NPC AI
+					Tooltip:
+						'''
+						Bring Expert Mode NPC AI into Normal Mode.
+						(Warning: may break some modded NPCs)
+						'''
+				}
+
+				AddExpertCommand: {
+					Label: Команда /difficulty
+					Tooltip: Добавляет админ-команду /difficulty, переключающую Режим эксперта.
+				}
 			}
 		}
 	}

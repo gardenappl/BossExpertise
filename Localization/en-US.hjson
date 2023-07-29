@@ -1,17 +1,11 @@
 Mods: {
 	BossExpertise: {
-		ItemName: {
-			FakeDemonHeart: Fake Demon Heart
-		}
-
-		ItemTooltip: {
-			FakeDemonHeart:
-				'''
-				You're not supposed to have this item in your inventory!
-				Drop it on the ground to get a regular Demon Heart back.
-				'''
-		}
-
+		ItemName.FakeDemonHeart: Fake Demon Heart
+		ItemTooltip.FakeDemonHeart:
+			'''
+			You're not supposed to have this item in your inventory!
+			Drop it on the ground to get a regular Demon Heart back.
+			'''
 		NowNormalMode: The world is now in Normal Mode.
 		NowExpertMode: The world is now in Expert Mode!
 		NowMasterMode: The world is now in Master Mode!
@@ -22,56 +16,86 @@ Mods: {
 		SwitchToNormal: Switch to Normal Mode
 		SwitchToExpert: Switch to Expert Mode
 		SwitchToMaster: Switch to Master Mode
-		DifficultyCommandUsage: Usage: /Difficulty <0(Normal)|1(Expert)|2(Master)>
+		DifficultyCommandUsage: Usage: /difficulty <0(Normal)|1(Expert)|2(Master)>
 
-
-		Config: {
-			$parentVal: Settings
-			ServerBlocked: Only the server owner can change the settings.
-
-			AddCheatSheetButton: {
-				$parentVal: Add Cheat Sheet/HERO's Mod button
-				Desc: Add a button that toggles difficulty mode to the Cheat Sheet mod and HERO's Mod.
+		Items: {
+			FakeDemonHeart: {
+				DisplayName: Fake Demon Heart
+				Tooltip: ""
 			}
+		}
 
-			ChangeAI: {
-				$parentVal: Change Boss AI
-				Desc:
-					'''
-					Bring Expert Mode boss AI into Normal Mode.
-					(Warning: may break some modded bosses)
-					'''
-			}
+		Configs: {
+			Config: {
+				DisplayName: Settings
+				ServerBlocked: Only the server owner can change the settings.
 
-			DropBags: Treasure Bags in Normal Mode
+				CurrentFakedDifficulty: {
+					Label: Current Faked Difficulty
+					Tooltip: Makes the enabled settings think it is set to this difficulty.
+				}
 
-			ExpertCommand: {
-				$parentVal: Add /difficulty command
-				Desc: Add the /difficulty chat command that toggles Expert Mode.
-			}
+				DropTreasureBagsInNormal: {
+					Label: Modify loot
+					Tooltip: Changes loot in accordence with your selected Beneficial Difficulty.
+				}
 
-			CurrentFakedDifficulty: {
-				$parentVal: Current Faked Difficulty
-				Desc: Makes the world think it is set to this difficulty.
-			}
+				AddCheatSheetButton: {
+					Label: Add Cheat Sheet/HERO's Mod button
+					Tooltip: Add a button that toggles difficulty mode to the Cheat Sheet mod and HERO's Mod.
+				}
 
-			SlotsHack: {
-				$parentVal: Accessory Slots
-				Desc: The extra accessory slot(s) work in Normal Mode.
-			}
+				ChangeBossAI: {
+					Label: Change Boss AI
+					Tooltip:
+						'''
+						Bring Expert Mode boss AI into Normal Mode.
+						(Warning: may break some modded bosses)
+						'''
+				}
 
-			BossBlacklist: {
-				$parentVal: Boss Blacklist
-				Desc: These bosses won't be affected by Boss Expertise.
-			}
+				SlotsWorksInNormal: {
+					Label: Accessory Slots
+					Tooltip: The extra accessory slot(s) work based on the current beneficial difficulty.
+				}
 
-			BossWhitelist: {
-				$parentVal: Boss Whitelist
-				Desc:
-					'''
-					These NPCs will be affected by Boss Expertise
-					even if they're technically not bosses.
-					'''
+				BossBlacklist: {
+					Label: Boss Blacklist
+					Tooltip: These NPCs won't be affected by Boss Expertise.
+				}
+
+				BossWhitelist: {
+					Label: Boss Whitelist
+					Tooltip:
+						'''
+						These NPCs will be affected by Boss Expertise
+						even if they're technically not bosses.
+						'''
+				}
+
+				FakedBeneficialDifficulty: {
+					Label: Faked Beneficial Difficulty
+					Tooltip: ""
+				}
+
+				ForTheWorthy: {
+					Label: For The Worthy
+					Tooltip: ""
+				}
+
+				ChangeNPCAI: {
+					Label: Change Enemy AI
+					Tooltip:
+						'''
+						Bring Expert Mode Enemy AI into Normal Mode.
+						(Warning: may break some modded bosses)
+						'''
+				}
+
+				AddExpertCommand: {
+					Label: Add /difficulty command
+					Tooltip: Add the /difficulty chat command that toggles Expert Mode.
+				}
 			}
 		}
 	}

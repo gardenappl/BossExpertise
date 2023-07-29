@@ -9,16 +9,17 @@ namespace BossExpertise
 	{
         public override void Load()
         {
-          On.Terraria.Player.IsAValidEquipmentSlotForIteration += HookIsAValidEquipmentSlotForIteration;
+          Terraria.On_Player.IsItemSlotUnlockedAndUsable += HookIsItemSlotUnlockedAndUsable;
         }
 
 		public override void Unload()
 		{
-			On.Terraria.Player.IsAValidEquipmentSlotForIteration -= HookIsAValidEquipmentSlotForIteration;
+			Terraria.On_Player.IsItemSlotUnlockedAndUsable -= HookIsItemSlotUnlockedAndUsable;
 		}
 
-		private static bool HookIsAValidEquipmentSlotForIteration(On.Terraria.Player.orig_IsAValidEquipmentSlotForIteration orig, Player self, int slot)
+		private static bool HookIsItemSlotUnlockedAndUsable(Terraria.On_Player.orig_IsItemSlotUnlockedAndUsable orig, Player self, int slot)
 		{
+			bool slotWorksSetting = ModContent.GetInstance<Config>().SlotsWorksInNormal;
 			if (slot < 10)
 			{
 				if (slot == 8)
@@ -42,24 +43,19 @@ namespace BossExpertise
 				}
 			}
 			return true;
-		DemonHeartSlot:
-			bool result = self.extraAccessory;
-			bool cantUseExpertModeSlot = (!Main.expertMode && !(BossExpertise.CurrentDifficulty > 0 && ModContent.GetInstance<Config>().SlotsWorksInNormal)) && !Main.gameMenu;
-			if (cantUseExpertModeSlot)
-			{
-				result = false;
-			}
-			return result;
-		MasterModeSlot:
-			result = true;
-			bool cantUseMasterModeSlot = (!Main.masterMode && !(BossExpertise.CurrentDifficulty > 1 && ModContent.GetInstance<Config>().SlotsWorksInNormal)) && !Main.gameMenu;
-			if (cantUseMasterModeSlot)
-			{
-				result = false;
-			}
-			return result;
+			DemonHeartSlot:
+				bool result = self.extraAccessory;
+				bool cantUseExpertModeSlot = (!Main.expertMode && !((BossExpertise.FakedBeneficialDifficulty.HasFlag(Difficulty.Expert) || BossExpertise.FakedBeneficialDifficulty.HasFlag(Difficulty.Master)) && slotWorksSetting)) && !Main.gameMenu;
+				result = cantUseExpertModeSlot ? false : result;
+				return result;
+			MasterModeSlot:
+				bool cantUseMasterModeSlot = (!Main.masterMode && !(BossExpertise.FakedBeneficialDifficulty.HasFlag(Difficulty.Master) && slotWorksSetting)) && !Main.gameMenu;
+				result = cantUseMasterModeSlot ? false : true;
+				return result;
 
-			orig(self, slot);
+				#pragma warning disable CS0162 // Unreachable code detected
+				orig(self, slot); //This is a total overwrite dont worry about it being unreachable.
+				#pragma warning restore CS0162 // Unreachable code detected
 		}
 
 	}

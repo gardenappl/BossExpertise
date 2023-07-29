@@ -5,13 +5,13 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader.Config;
 
 namespace BossExpertise
 {
-	[Label("$Mods.BossExpertise.Config")]
 	public class Config : ModConfig
 	{
 		public override ConfigScope Mode => ConfigScope.ServerSide;
@@ -24,53 +24,98 @@ namespace BossExpertise
 
 		public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message)
 		{
-			message = Language.GetTextValue("Mods.BossExpertise.Config.ServerBlocked");
-			return false;
+			if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+				message = Language.GetTextValue("Mods.BossExpertise.Configs.Config.ServerBlocked");
+				return false;
+			}
+			return true;
 		}
 
-		[Label("$Mods.BossExpertise.Config.CurrentFakedDifficulty")]
-		[Tooltip("$Mods.BossExpertise.Config.CurrentFakedDifficulty.Desc")]
-		[ReloadRequired]
-		[DrawTicks]
+        public override void OnChanged()
+        {
+			Difficulty newDifficulty = Difficulty.None;
+			Difficulty newBeneficialDifficulty = Difficulty.None;
+			/*if (BossExpertiseSystem.worldDifficulty.HasFlag(Difficulty.ForTheWorthy) || ForTheWorthy)
+			{
+				newDifficulty |= Difficulty.ForTheWorthy;
+				newBeneficialDifficulty |= Difficulty.ForTheWorthy;
+			}*/	
+
+			if (CurrentFakedDifficulty == "Expert")
+			{
+				newDifficulty |= Difficulty.Expert;
+			}
+			else if (CurrentFakedDifficulty == "Master")
+			{
+				newDifficulty |= Difficulty.Master;
+			}
+			else
+			{
+				newDifficulty |= Difficulty.Classic;
+			}
+
+			if (FakedBeneficialDifficulty == "Expert")
+			{
+				newBeneficialDifficulty |= Difficulty.Expert;
+			}
+			else if (FakedBeneficialDifficulty == "Master")
+			{
+				newBeneficialDifficulty |= Difficulty.Master;
+			}
+			else
+			{
+				newBeneficialDifficulty |= Difficulty.Classic;
+			}
+
+			if (newDifficulty != BossExpertise.FakedDifficulty)
+				BossExpertise.FakedDifficulty = newDifficulty;
+
+			if (newBeneficialDifficulty != BossExpertise.FakedBeneficialDifficulty)
+				BossExpertise.FakedBeneficialDifficulty = newBeneficialDifficulty;
+		}
+
+        [DrawTicks]
 		[OptionStrings(new string[] { "Expert", "Master"})]
 		[DefaultValue("Expert")]
 		public string CurrentFakedDifficulty;
 
-		[Label("$Mods.BossExpertise.Config.DropBags")]
+		[DrawTicks]
+		[OptionStrings(new string[] { "Expert", "Master" })]
+		[DefaultValue("Expert")]
+		public string FakedBeneficialDifficulty;
+
+		//[DefaultValue(false)]
+		//public bool ForTheWorthy;
+
 		[DefaultValue(false)]
 		public bool DropTreasureBagsInNormal;
 
-		/*[Label("$Mods.BossExpertise.Config.AddCheatSheetButton")]
-		[Tooltip("$Mods.BossExpertise.Config.AddCheatSheetButton.Desc")]
-		[ReloadRequired]
-		[DefaultValue(true)]
-		public bool AddCheatSheetButton;*/
-
-		[Label("$Mods.BossExpertise.Config.ChangeAI")]
-		[Tooltip("$Mods.BossExpertise.Config.ChangeAI.Desc")]
 		[DefaultValue(true)]
 		public bool ChangeBossAI;
 
-		[Label("$Mods.BossExpertise.Config.SlotsHack")]
-		[Tooltip("$Mods.BossExpertise.Config.SlotsHack.Desc")]
+		[DefaultValue(false)]
+		public bool ChangeNPCAI;
+
+		[DefaultValue(false)]
 		public bool SlotsWorksInNormal;
 
-		[Label("$Mods.BossExpertise.Config.BossBlacklist")]
-		[Tooltip("$Mods.BossExpertise.Config.BossBlacklist.Desc")]
 		public List<NPCDefinition> BossBlacklist = new List<NPCDefinition>();
 
-		[Label("$Mods.BossExpertise.Config.BossWhitelist")]
-		[Tooltip("$Mods.BossExpertise.Config.BossWhitelist.Desc")]
 		public List<NPCDefinition> BossWhitelist = new List<NPCDefinition>
 				{
-					new NPCDefinition(NPCID.DD2Betsy)
+					new NPCDefinition(NPCID.DD2Betsy),
+					new NPCDefinition(NPCID.PirateShip),
+					new NPCDefinition(NPCID.PirateShipCannon)
 				};
 
-		/*[Label("$Mods.BossExpertise.Config.ExpertCommand")]
-		[Tooltip("$Mods.BossExpertise.Config.ExpertCommand.Desc")]
 		[ReloadRequired]
 		[DefaultValue(true)]
-		public bool AddExpertCommand;*/
+		public bool AddExpertCommand;
+
+		[ReloadRequired]
+		[DefaultValue(true)]
+		public bool AddCheatSheetButton;
 
 		[OnDeserialized]
 		internal void OnDeserializedMethod(StreamingContext context)
@@ -79,6 +124,9 @@ namespace BossExpertise
 			// Both enforcing ranges and not enforcing ranges have uses in mods. Make sure you fix config values if values outside the range will mess up your mod.
 			if (CurrentFakedDifficulty != "Expert" && CurrentFakedDifficulty != "Master")
 				CurrentFakedDifficulty = "Expert";
+
+			if (FakedBeneficialDifficulty != "Expert" && FakedBeneficialDifficulty != "Master")
+				FakedBeneficialDifficulty = "Expert";
 		}
 	}
 }
