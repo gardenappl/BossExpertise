@@ -6,36 +6,44 @@ namespace BossExpertise
 {
     class BossExpertiseSystem : ModSystem
 	{
-        public override void OnWorldLoad()
+		static public Difficulty worldDifficulty = new();
+        public override void PostSetupContent()
         {
 			if (Main.masterMode)
-				BossExpertise.ActualDifficulty = 2;
+				worldDifficulty |= Difficulty.Master;
 			else if (Main.expertMode)
-				BossExpertise.ActualDifficulty = 1;
+				worldDifficulty |= Difficulty.Expert;
 			else
-				BossExpertise.ActualDifficulty = 0;
-        }
+				worldDifficulty |= Difficulty.Classic;
+			/*
+			if (Main.getGoodWorld)
+				worldDifficulty |= Difficulty.ForTheWorthy;
 
-		public override void PostUpdateTime()
+			if (worldDifficulty.HasFlag(Difficulty.ForTheWorthy) || ModContent.GetInstance<Config>().ForTheWorthy)
+			{
+				BossExpertise.FakedDifficulty |= Difficulty.ForTheWorthy;
+				BossExpertise.FakedBeneficialDifficulty |= Difficulty.ForTheWorthy;
+			}*/
+
+		}
+
+		/*public override void PostUpdateTime()
 		{
 			if (Main.GameModeInfo.IsJourneyMode)
 				if (Main.masterMode)
-					BossExpertise.ActualDifficulty = 2;
+					BossExpertise.FakedDifficulty |= Difficulty.Master;
 				else if (Main.expertMode)
-					BossExpertise.ActualDifficulty = 1;
+					BossExpertise.FakedDifficulty |= Difficulty.Expert;
 				else
-					BossExpertise.ActualDifficulty = 0;
+					BossExpertise.FakedDifficulty |= Difficulty.Classic;
 			else
 				return;
 			
-		}
+		}*/
 
 		public override void PreSaveAndQuit()
 		{
-			if (BossExpertise.CurrentDifficulty != BossExpertise.ActualDifficulty) //an extra check just in case
-			{
-				BossExpertise.HookDifficultyMode(BossExpertise.ActualDifficulty);
-			}
+			BossExpertise.HookDifficultyMode(worldDifficulty);
 		}
 	}
 }

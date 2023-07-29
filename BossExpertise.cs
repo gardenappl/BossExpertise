@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using Terraria;
 using Terraria.ID;
@@ -9,33 +10,48 @@ namespace BossExpertise
 {
     public class BossExpertise : Mod
 	{
-		public static int ActualDifficulty = 0;
-		public static int CurrentDifficulty = 0;
+		public static Difficulty FakedDifficulty;
+		public static Difficulty FakedBeneficialDifficulty;
 		public override void Load()
 		{
 
 			LegacyConfigV1.Load();
 			LegacyConfigV2.Load();
 			AddConfig("Config", new Config());
-			if (ModContent.GetInstance<Config>().CurrentFakedDifficulty == "Expert")
+			string FakedDifficultySetting = ModContent.GetInstance<Config>().CurrentFakedDifficulty;
+			if (FakedDifficultySetting == "Expert")
 			{
-				CurrentDifficulty = 1;
+				FakedDifficulty |= Difficulty.Expert;
 			}
-			else if (ModContent.GetInstance<Config>().CurrentFakedDifficulty == "Master")
+			else if (FakedDifficultySetting == "Master")
 			{
-				CurrentDifficulty = 2;
+				FakedDifficulty |= Difficulty.Master;
 			}
 			else
 			{
-				CurrentDifficulty = 0;
+				FakedDifficulty |= Difficulty.Classic;
+			}
+
+			string FakedBeneficialDifficultySetting = ModContent.GetInstance<Config>().FakedBeneficialDifficulty;
+			if (FakedBeneficialDifficultySetting == "Expert")
+			{
+				FakedBeneficialDifficulty |= Difficulty.Expert;
+			}
+			else if (FakedBeneficialDifficultySetting == "Master")
+			{
+				FakedBeneficialDifficulty |= Difficulty.Master;
+			}
+			else
+			{
+				FakedBeneficialDifficulty |= Difficulty.Classic;
 			}
 		}
 		
-		/*public override void PostSetupContent()
+		public override void PostSetupContent()
 		{
-			if(ModContent.GetInstance<Config>().AddCheatSheetButton)
+			if (ModContent.GetInstance<Config>().AddCheatSheetButton)
 				CheatSheetIntegration.Load();
-		}*/
+		}
 
 		public override void Unload()
 		{
@@ -50,12 +66,10 @@ namespace BossExpertise
 			switch(msgType)
 			{
 				case ExpertMessageType.SyncDifficulty:
-					int difficulty = reader.ReadInt32();
+					Difficulty difficulty = (Difficulty)reader.ReadByte();
 					HookDifficultyMode(difficulty);
 					if (Main.netMode == NetmodeID.Server)
-					{
 						SyncDifficultyMode(difficulty, whoAmI);
-					}
 					return;
 				case ExpertMessageType.SyncDemonHeart:
 					var player = Main.player[reader.ReadInt32()];
@@ -64,30 +78,21 @@ namespace BossExpertise
 			}
 		}
 		
-		void SyncDifficultyMode(int difficulty, int ignoreClient = -1)
+		void SyncDifficultyMode(Difficulty difficulty, int ignoreClient = -1)
 		{ 
 			HookDifficultyMode(difficulty);
 			if (Main.netMode != NetmodeID.SinglePlayer)
 			{
 				var msg = GetPacket();
 				msg.Write((byte)ExpertMessageType.SyncDifficulty);
-				msg.Write(difficulty);
+				msg.Write((byte)difficulty);
 				msg.Send(ignoreClient: ignoreClient);
 			}
 		}
 		
-		public static void HookDifficultyMode(int difficulty)
+		public static void HookDifficultyMode(Difficulty difficulty)
         {
-			if (difficulty == 0 || difficulty > 2)
-            {
-				FieldInfo expert = typeof(Main)
-				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
-				expert.SetValue(null, false);
-				FieldInfo master = typeof(Main)
-				.GetField("_overrideForMasterMode", BindingFlags.Static | BindingFlags.NonPublic);
-				master.SetValue(null, false);
-			}
-			else if (difficulty == 1)
+			if (difficulty.HasFlag(Difficulty.Expert))
 			{
 				FieldInfo expert = typeof(Main)
 				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
@@ -97,7 +102,7 @@ namespace BossExpertise
 				master.SetValue(null, false);
 
 			}
-			else if (difficulty == 2)
+			else if (difficulty.HasFlag(Difficulty.Master))
 			{
 				FieldInfo expert = typeof(Main)
 				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
@@ -106,45 +111,66 @@ namespace BossExpertise
 				.GetField("_overrideForMasterMode", BindingFlags.Static | BindingFlags.NonPublic);
 				master.SetValue(null, true);
 			}
+			else
+			{
+				FieldInfo expert = typeof(Main)
+				.GetField("_overrideForExpertMode", BindingFlags.Static | BindingFlags.NonPublic);
+				expert.SetValue(null, false);
+				FieldInfo master = typeof(Main)
+				.GetField("_overrideForMasterMode", BindingFlags.Static | BindingFlags.NonPublic);
+				master.SetValue(null, false);
+			}
+			//Main.getGoodWorld = difficulty.HasFlag(Difficulty.ForTheWorthy);
 		}
 
-		public void SetDifficultyMode(int difficulty)
+		public void SetDifficultyMode(Difficulty difficulty)
 		{
-			if (difficulty > 2)
-			{
-				difficulty = 0;
-			}
-			if (Main.expertMode && difficulty == 0)
-			{
-				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowNormalMode"));
-			}
-			else if (!Main.expertMode && difficulty == 1)
-			{
-				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowExpertMode"), 255, 50, 50);
-			}
-			else if (!Main.masterMode && difficulty == 2)
-			{
-				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowMasterMode"), 255, 50, 50);
-			}
-			else if (!Main.expertMode && difficulty == 0)
+			Log(FakedDifficulty);
+			Log(difficulty);
+			if (FakedDifficulty.HasFlag(Difficulty.Classic) && difficulty.HasFlag(Difficulty.Classic))
 			{
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyNormalMode"));
 			}
-			else if (Main.expertMode && difficulty == 1)
+			else if (FakedDifficulty.HasFlag(Difficulty.Expert) && difficulty.HasFlag(Difficulty.Expert))
 			{
-				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyExpertMode"), 255, 50, 50);
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyExpertMode"), 255, 127, 50);
 			}
-			else if (!Main.masterMode && difficulty == 2)
+			else if (FakedDifficulty.HasFlag(Difficulty.Master) && difficulty.HasFlag(Difficulty.Master))
 			{
 				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyMasterMode"), 255, 50, 50);
 			}
+			else if (difficulty.HasFlag(Difficulty.Classic))
+			{
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowNormalMode"));
+			}
+			else if (difficulty.HasFlag(Difficulty.Expert))
+			{
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowExpertMode"), 255, 127, 50);
+			}
+			else if (difficulty.HasFlag(Difficulty.Master))
+			{
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowMasterMode"), 255, 50, 50);
+			}
 			else
 			{
-				Log("Something went wrong in BossExpertise: " + CurrentDifficulty);
+				Log("Something went wrong in BossExpertise: " + FakedDifficulty);
 				return;
 			}
-			SyncDifficultyMode(difficulty);
-			ActualDifficulty = difficulty;
+
+			/*if (FakedDifficulty.HasFlag(Difficulty.ForTheWorthy) && difficulty.HasFlag(Difficulty.ForTheWorthy))
+			{
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.AlreadyForTheWorthy"), 255, 50, 50);
+			}
+			else if (difficulty.HasFlag(Difficulty.ForTheWorthy))
+			{
+				Main.NewText(Language.GetTextValue("Mods.BossExpertise.NowForTheWorthy"));
+			}*/
+
+			if ( FakedDifficulty != difficulty )
+            {
+				SyncDifficultyMode(difficulty);
+				FakedDifficulty = difficulty;
+			}
 		}
 
 		public static void Log(object message)
@@ -152,4 +178,15 @@ namespace BossExpertise
 			ModContent.GetInstance<BossExpertise>().Logger.Info(message);
 		}
 	}
+
+	[Flags]
+	public enum Difficulty : byte
+    {
+		None = 0,
+		Classic = 1,
+		Expert = 2,
+		Master = 4,
+		ForTheWorthy = 8
+	}
+	
 }
