@@ -1,11 +1,5 @@
 Mods: {
 	BossExpertise: {
-		// ItemName.FakeDemonHeart: Fake Demon Heart
-		/* ItemTooltip.FakeDemonHeart:
-			'''
-			You're not supposed to have this item in your inventory!
-			Drop it on the ground to get a regular Demon Heart back.
-			''' */
 		NowNormalMode: Этот мир теперь в классическом режиме.
 		NowExpertMode: Этот мир теперь в режиме эксперта!
 		NowMasterMode: The world is now in режиме мастера!

@@ -1,11 +1,5 @@
 Mods: {
 	BossExpertise: {
-		ItemName.FakeDemonHeart: Fake Demon Heart
-		ItemTooltip.FakeDemonHeart:
-			'''
-			You're not supposed to have this item in your inventory!
-			Drop it on the ground to get a regular Demon Heart back.
-			'''
 		NowNormalMode: The world is now in Normal Mode.
 		NowExpertMode: The world is now in Expert Mode!
 		NowMasterMode: The world is now in Master Mode!
@@ -31,13 +25,13 @@ Mods: {
 				ServerBlocked: Only the server owner can change the settings.
 
 				CurrentFakedDifficulty: {
-					Label: Current Faked Difficulty
-					Tooltip: Makes the enabled settings think it is set to this difficulty.
+					Label: Fake Difficulty
+					Tooltip: Extra challenging features (e.g. boss AI) will function like on this difficulty.
 				}
 
 				DropTreasureBagsInNormal: {
 					Label: Modify loot
-					Tooltip: Changes loot in accordence with your selected Beneficial Difficulty.
+					Tooltip: Changes boss loot according to your selected Beneficial Difficulty.
 				}
 
 				AddCheatSheetButton: {
@@ -49,7 +43,7 @@ Mods: {
 					Label: Change Boss AI
 					Tooltip:
 						'''
-						Bring Expert Mode boss AI into Normal Mode.
+						Boss AI will change according to the selected Fake Difficulty.
 						(Warning: may break some modded bosses)
 						'''
 				}
@@ -75,26 +69,26 @@ Mods: {
 
 				FakedBeneficialDifficulty: {
 					Label: Faked Beneficial Difficulty
-					Tooltip: ""
+					Tooltip: Beneficial features (e.g. boss drops) will function as if you're playing on this difficulty.
 				}
 
-				ForTheWorthy: {
+				/* ForTheWorthy: {
 					Label: For The Worthy
 					Tooltip: ""
-				}
+				} */
 
 				ChangeNPCAI: {
 					Label: Change Enemy AI
 					Tooltip:
 						'''
-						Bring Expert Mode Enemy AI into Normal Mode.
-						(Warning: may break some modded bosses)
+						Non-boss enemy AI will change according to the selected Fake Difficulty.
+						(Warning: may break some modded enemies)
 						'''
 				}
 
 				AddExpertCommand: {
 					Label: Add /difficulty command
-					Tooltip: Add the /difficulty chat command that toggles Expert Mode.
+					Tooltip: Add the /difficulty chat command that changes the world's actual difficulty.
 				}
 			}
 		}
