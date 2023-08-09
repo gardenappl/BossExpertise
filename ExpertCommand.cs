@@ -1,6 +1,7 @@
 ﻿
 using System;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -18,31 +19,29 @@ namespace BossExpertise
                     newDifficulty = Difficulty.Expert;
                 else if (currentDifficulty.HasFlag(Difficulty.Expert))
                     newDifficulty = Difficulty.Master;
-                else 
+                else
                     newDifficulty = Difficulty.Classic;
-                ModContent.GetInstance<BossExpertise>().SetDifficultyMode(newDifficulty);
+                ModContent.GetInstance<BossExpertise>().SyncDifficultyMode(newDifficulty, SettingTarget.World);
             }
             else if (args.Length == 1)
             {
                 if (args[0].Equals("2", StringComparison.OrdinalIgnoreCase))
                 {
                     newDifficulty = Difficulty.Master;
-                    ModContent.GetInstance<BossExpertise>().SetDifficultyMode(newDifficulty);
+                    ModContent.GetInstance<BossExpertise>().SyncDifficultyMode(newDifficulty, SettingTarget.World);
                 }
-                if (args[0].Equals("1", StringComparison.OrdinalIgnoreCase))
+                else if (args[0].Equals("1", StringComparison.OrdinalIgnoreCase))
                 {
                     newDifficulty = Difficulty.Expert;
-                    ModContent.GetInstance<BossExpertise>().SetDifficultyMode(newDifficulty);
+                    ModContent.GetInstance<BossExpertise>().SyncDifficultyMode(newDifficulty, SettingTarget.World);
                 }
                 else if (args[0].Equals("0", StringComparison.OrdinalIgnoreCase))
                 {
                     newDifficulty = Difficulty.Classic;
-                    ModContent.GetInstance<BossExpertise>().SetDifficultyMode(newDifficulty);
+                    ModContent.GetInstance<BossExpertise>().SyncDifficultyMode(newDifficulty, SettingTarget.World);
                 }
                 else
-                {
                     Main.NewText(Language.GetTextValue("Mods.BossExpertise.DifficultyCommandUsage"));
-                }
             }
             else
             {
@@ -50,6 +49,7 @@ namespace BossExpertise
             }
 
         }
+        public override string Usage => Language.GetTextValue("Mods.BossExpertise.DifficultyCommandUsage");
 
         public override string Command
         {
