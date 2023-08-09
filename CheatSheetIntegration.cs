@@ -52,7 +52,7 @@ namespace BossExpertise
 				newDifficulty = Difficulty.Master;
 			else
 				newDifficulty = Difficulty.Classic;
-			ModContent.GetInstance<BossExpertise>().SetDifficultyMode(newDifficulty);
+			ModContent.GetInstance<BossExpertise>().SyncDifficultyMode(newDifficulty, SettingTarget.Faked);
 		}
 		
 		public static void OnPermissionChanged(bool hasPermission)
